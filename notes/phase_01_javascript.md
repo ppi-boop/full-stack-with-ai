@@ -1,0 +1,479 @@
+# Phase 01 — JavaScript Master Study Handbook
+
+> **Comprehensive Revision Guide:** Phase 1 (JavaScript Fundamentals)  
+> Covers Topics 1 to 10 with deep explanations, visual memory models, production bug comparisons, and interview traps.
+
+---
+
+## Quick Navigation
+* [Topic 1: Variables (let, const, var), Hoisting & TDZ](#topic-1-variables-let-const-var-hoisting--tdz)
+* [Topic 2: Primitives vs References, Stack vs Heap & Memory](#topic-2-primitives-vs-references-stack-vs-heap--memory)
+* [Topic 3: Operators, Type Coercion, Truthy/Falsy & ?? vs ||](#topic-3-operators-type-coercion-truthyfalsy--nullish-coalescing)
+* [Topic 4: Loops, Iteration & The Fatal Async forEach Trap](#topic-4-loops-iteration--the-fatal-async-foreach-trap)
+* [Topic 5: Functions: Declarations, Expressions, Arrows & this](#topic-5-functions-declarations-expressions-arrows--this)
+* [Topic 6: Arrays, Objects, Maps, Sets & Immutability](#topic-6-arrays-objects-maps-sets--immutability)
+* [Topic 7: Destructuring, Spread, Rest & Optional Chaining](#topic-7-destructuring-spread-rest--optional-chaining)
+* [Topic 8: Functional Array Methods (map, filter, reduce, find, some, every)](#topic-8-functional-array-methods)
+* [Topic 9: Closures, Higher-Order Functions & React Stale Closures](#topic-9-closures-higher-order-functions--react-stale-closures)
+* [Topic 10: The this Keyword, Explicit Binding (call, apply, bind) & Prototypes](#topic-10-the-this-keyword-explicit-binding--prototypes)
+
+---
+
+# Topic 1: Variables (`let`, `const`, `var`), Hoisting & TDZ
+
+### 1. Mental Model at a Glance
+* **`let` (Dry-Erase Board):** You write a value. You can erase and write a new value anytime. Block-scoped `{}`.
+* **`const` (Permanent Glue Label):** Glued to one memory box. You cannot pull the label off to point to another box. **However**, you can still change what is *inside* the box if it is an object or array.
+* **`var` (The Bad Ghost):** Floats up to the top of the entire function (hoisted as `undefined`), ignoring `if` and `for` blocks.
+
+---
+
+### 2. Under the Hood: The 2 Execution Passes of V8
+```
+[ Pass 1: Parsing / Creation Phase ]      [ Pass 2: Execution Phase ]
+V8 scans code, registers variable names    V8 executes line-by-line,
+and allocates memory locations.            assigns values and runs logic.
+```
+* **`var`:** Registered and **immediately initialized to `undefined`**.
+* **`let` & `const`:** Registered in memory, but **UNINITIALIZED**. Placed into the **Temporal Dead Zone (TDZ)**.
+
+---
+
+### 3. The Temporal Dead Zone (TDZ) & Proof of Hoisting
+> **TDZ Definition:** The span of code from the start of a block until the line where a `let` or `const` is declared. Accessing it here throws a `ReferenceError`.
+
+#### Proof that `let` is Hoisted:
+```javascript
+let city = "Surat"; // Global
+
+function test() {
+  console.log(city); // 💥 ReferenceError: Cannot access 'city' before initialization
+  let city = "Mumbai"; // Local
+}
+test();
+```
+* **Why this proves hoisting:** If `let` was NOT hoisted, line 4 would have happily looked outside and printed `"Surat"`. The fact that it crashes proves V8 hoisted `city` locally during Pass 1, shadowed the global variable, and locked it in the TDZ!
+
+---
+
+### 4. Block Scope vs Function Scope
+```javascript
+if (true) {
+  var leaked = "I escaped!";
+  let trapped = "I stay inside!";
+}
+console.log(leaked);  // "I escaped!" (var completely ignores if blocks!)
+console.log(trapped); // 💥 ReferenceError: trapped is not defined
+```
+
+---
+
+### 5. Why `const` Arrays and Objects Can Be Mutated
+```javascript
+const colors = ["red", "blue"];
+colors.push("green"); // ✅ ALLOWED: Memory address of colors didn't change!
+colors = ["yellow"];  // ❌ TypeError: Assignment to constant variable!
+```
+* `const` protects the **memory pointer**, not the heap contents. Use `Object.freeze()` to lock contents.
+
+---
+
+### 6. The Classic Loop Trap: `var` vs `let`
+```javascript
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// Output: 3 3 3
+```
+* **Why with `var`:** There is only **one shared variable `i`** in memory. When the 100ms timers fire, the loop has already completed and `i = 3`. All 3 callbacks look at that same `i`.
+* **Why `let` prints `0 1 2`:** JavaScript creates a **brand-new lexical memory binding for every single turn of the loop**. Each callback captures its own private snapshot (`i_0 = 0`, `i_1 = 1`, `i_2 = 2`).
+
+---
+
+# Topic 2: Primitives vs References, Stack vs Heap & Memory
+
+### 1. Mental Model at a Glance
+* **Primitive (A ₹500 Note):** If you give a copy to your friend, they get their own physical note. Tearing their note does not affect yours.
+* **Reference Type (A House Address on a Sticky Note):** You copy the address onto your friend's note. You have two notes, but **one house**. If your friend paints the walls red, your house is red too.
+
+---
+
+### 2. Stack vs Heap Memory Allocation
+```
+STACK (Fast, fixed-size memory)           HEAP (Dynamic, flexible memory)
+--------------------------------------    ----------------------------------------
+let age = 25;                             
+let name = "Asha";                        
+let userPtr = 0x00A1  ------------------> 0x00A1: { name: "Ravi", role: "admin" }
+let arrPtr  = 0x00B2  ------------------> 0x00B2: [ 10, 20, 30 ]
+```
+* **Primitives** (`string`, `number`, `boolean`, `null`, `undefined`, `bigint`, `symbol`): Live directly on the **Stack**. Copied by value.
+* **Objects, Arrays, Functions:** Live on the **Heap**. Variables on the Stack only hold the **memory address pointer**.
+
+---
+
+### 3. The 3 Legendary Gotchas
+
+#### Gotcha 1: `typeof null === "object"`
+* `null` is a **primitive**, NOT an object.
+* This is an unfixed 1995 bug from Brendan Eich's original C-style type-tag system where null pointer `0x00` matched the object tag `000`.
+* **Safe Check:** Always check with `val === null`.
+
+#### Gotcha 2: Floating Point Math (`0.1 + 0.2 !== 0.3`)
+* Computers store numbers in binary floating-point (IEEE 754). Binary cannot cleanly represent fractions like $1/10$, creating a tiny rounding error: `0.30000000000000004`.
+* **Production Rule for Money:** **NEVER use floats for currency.** Store money as integer smallest units (cents or paise):
+  ```javascript
+  const priceInPaise = 1999; // ₹19.99
+  ```
+
+#### Gotcha 3: `NaN === NaN` is `false`
+* `NaN` represents an unrepresentable value. An undefined math value cannot equal another undefined math value.
+* Check with: `Number.isNaN(val)`.
+
+---
+
+### 4. Shallow Copy vs Deep Copy
+```javascript
+const user = { name: "Asha", address: { city: "Surat" } };
+
+// 1. Shallow Copy (Spread ...): Copies only layer 1
+const shallow = { ...user };
+shallow.address.city = "Mumbai"; // 💥 Mutates user.address.city too!
+
+// 2. Deep Copy (structuredClone): Clones all nested layers
+const deep = structuredClone(user);
+deep.address.city = "Delhi"; // ✅ user.address.city remains "Surat"
+```
+* Avoid `JSON.parse(JSON.stringify(obj))` because it deletes functions, symbols, and `undefined`.
+
+---
+
+### 5. Why Reference Equality Matters in React
+```javascript
+{} === {} // false (Two different heap addresses!)
+[] === [] // false
+```
+* React uses shallow reference equality (`Object.is`) to check props. Passing an inline object `<Child config={{ theme: "dark" }} />` forces `Child` to **re-render every single time**, because a new heap address is allocated on every render.
+
+---
+
+# Topic 3: Operators, Type Coercion, Truthy/Falsy & Nullish Coalescing
+
+### 1. The Only 8 Falsy Values in JavaScript
+Everything in JavaScript is truthy **EXCEPT** these 8:
+1. `false`
+2. `0`
+3. `-0`
+4. `0n` (BigInt zero)
+5. `""` (Empty string)
+6. `null`
+7. `undefined`
+8. `NaN`
+
+> [!WARNING]
+> In JavaScript, **`[]` (empty array)**, **`{}` (empty object)**, and **`"0"` (string with zero)** are **TRUTHY**!
+> Checking if an array has items must always be: `if (arr.length === 0)`.
+
+---
+
+### 2. The `||` vs `??` Production Bug
+
+| Operator | When does it trigger fallback? | Behavior on `0` and `""` |
+|---|---|---|
+| **`||` (Logical OR)** | On **ANY falsy value** (`0`, `""`, `false`, `null`, `undefined`) | **Overwrites them** (Causes bugs!) |
+| **`??` (Nullish Coalescing)** | **ONLY on `null` and `undefined`** | **Preserves them** (Safe for data) |
+
+```javascript
+const speed = 0; // 0 km/h is a valid speed measurement!
+
+const bug = speed || 50;  // 50 (Bug: treated 0 as missing data!)
+const safe = speed ?? 50; // 0  (Correct: preserved valid 0!)
+```
+
+---
+
+### 3. Loose (`==`) vs Strict (`===`) Equality
+* **`===` (Strict):** No type coercion. If types differ, returns `false` immediately.
+* **`==` (Loose):** Converts types using Abstract Equality. When comparing string/boolean with numbers, **it converts both sides to numbers**:
+  * `"0" == false` $\rightarrow$ `0 == 0` $\rightarrow$ **`true`**!
+  * `0 == ""` $\rightarrow$ `0 == 0` $\rightarrow$ **`true`**!
+  * `[] == false` $\rightarrow$ `"" == false` $\rightarrow$ `0 == 0` $\rightarrow$ **`true`**!
+* **Rule:** Never use `==`. Always use `===`.
+
+---
+
+# Topic 4: Loops, Iteration & The Fatal Async `forEach` Trap
+
+### 1. `for...of` vs `for...in`
+
+```javascript
+const fruits = ["apple", "banana", "cherry"];
+
+// for...of gives VALUES:
+for (const item of fruits) console.log(item); // "apple", "banana", "cherry"
+
+// for...in gives KEYS / INDICES:
+for (const idx in fruits) console.log(idx); // "0", "1", "2" (As strings!)
+```
+* **`for...of`:** For iterating over values of iterables (Arrays, Maps, Sets, Strings).
+* **`for...in`:** For inspecting object keys. **Never use on arrays** (returns string indices and iterates prototype properties).
+
+---
+
+### 2. Iterating Objects Cleanly
+```javascript
+const user = { name: "Asha", role: "admin" };
+
+Object.keys(user);   // ["name", "role"]
+Object.values(user); // ["Asha", "admin"]
+
+// Modern key-value loop:
+for (const [key, val] of Object.entries(user)) {
+  console.log(`${key}: ${val}`);
+}
+```
+
+---
+
+### 3. The Fatal `forEach` with `async/await` Bug
+```javascript
+async function process() {
+  console.log("Start");
+
+  [1, 2, 3].forEach(async (num) => {
+    await wait(100);
+    console.log("Num:", num);
+  });
+
+  console.log("End");
+}
+process();
+// Output: Start -> End -> Num: 1 -> Num: 2 -> Num: 3
+```
+* **Why `"End"` prints before the numbers:** `forEach` is a synchronous loop written in 2009. Internally, it invokes your callback and **throws away the returned Promise**. It never `await`s the callback!
+
+#### The 2 Production Fixes:
+1. **Sequential Waiting (One-by-one):** Use **`for...of`** (the loop itself honors `await`):
+   ```javascript
+   for (const num of [1, 2, 3]) {
+     await wait(100);
+     console.log("Num:", num);
+   }
+   console.log("End"); // Waits for all numbers!
+   ```
+2. **Parallel / Concurrent Execution (Fastest):** Use **`Promise.all`**:
+   ```javascript
+   await Promise.all([1, 2, 3].map(async (num) => {
+     await wait(100);
+     console.log("Num:", num);
+   }));
+   console.log("End"); // Runs all 3 simultaneously, waits for all!
+   ```
+
+---
+
+# Topic 5: Functions: Declarations, Expressions, Arrows & `this`
+
+### 1. Function Comparison Matrix
+| Feature | Function Declaration | Function Expression | Arrow Function |
+|---|---|---|---|
+| **Syntax** | `function foo() {}` | `const foo = function() {}` | `const foo = () => {}` |
+| **Hoisting** | **Fully hoisted with body** | Hoisted in TDZ | Hoisted in TDZ |
+| **Own `this`?** | ✅ Yes (depends on caller) | ✅ Yes (depends on caller) | ❌ **No (lexically inherited)** |
+| **Constructor `new`?** | ✅ Yes | ✅ Yes | ❌ **No (`TypeError`)** |
+| **`arguments`?** | ✅ Yes | ✅ Yes | ❌ **No (use `...args`)** |
+
+---
+
+### 2. The 3 Golden Rules of Arrow Functions
+1. **No own `this`:** Inherits `this` from the enclosing scope.
+   * ❌ **Never use arrow functions for object methods:**
+     ```javascript
+     const user = {
+       name: "Asha",
+       greet: () => `Hi ${this.name}` // 'this' points to window/undefined!
+     };
+     ```
+   * ✅ **Always use arrow functions for internal callbacks:**
+     ```javascript
+     numbers.map((n) => n * this.factor); // Borrows outer method's this!
+     ```
+2. **Cannot be called with `new`:** Arrow functions lack internal `[[Construct]]` methods.
+3. **Returning an Object Literal Trap:** Wrap objects in parentheses:
+   ```javascript
+   const makeUser = (name) => ({ name }); // Wrap in ()
+   ```
+
+---
+
+# Topic 6: Arrays, Objects, Maps, Sets & Immutability
+
+### 1. The React Immutability Rule
+
+| Mutating (Destroys Original) ❌ BANNED IN REACT | Immutable (Returns New Copy) ✅ SAFE IN REACT |
+|---|---|
+| `push()`, `pop()` | `concat()` |
+| `shift()`, `unshift()` | `slice()` |
+| `splice()` | `map()`, `filter()` |
+| `sort()`, `reverse()` | `toSorted()`, `toReversed()` (ES2023) |
+
+* **Why mutating state breaks React:** React checks `Object.is(prevState, nextState)`. If you do `arr.push(40)` and `setArr(arr)`, the memory address is identical, so React **skips re-rendering completely**.
+
+---
+
+### 2. The Infamous `.sort()` Alphabetical Bug
+```javascript
+[10, 5, 40, 25, 100, 1].sort();
+// Output: [1, 10, 100, 25, 40, 5]
+```
+* **Why:** By default, `.sort()` converts all elements to strings and compares their UTF-16 character codes (`"100"` comes before `"25"`).
+* **Fix:** Always provide a comparator: `numbers.sort((a, b) => a - b)`.
+
+---
+
+### 3. `Set` vs `Map`
+* **`Set` (Deduplication):** Stores only unique values:
+  ```javascript
+  const unique = [...new Set([1, 1, 2, 3, 3])]; // [1, 2, 3]
+  ```
+* **`Map` (Advanced Key-Value):** Plain objects only allow strings/symbols as keys. `Map` allows **objects, functions, or any type as keys**, maintains insertion order, and has a built-in `.size` property.
+
+---
+
+# Topic 7: Destructuring, Spread, Rest & Optional Chaining
+
+### 1. Destructuring: Renaming & Defaults
+```javascript
+const user = { id: 101, username: "asha_dev" };
+
+// Renaming (creates 'handle', does NOT create 'username'):
+const { username: handle } = user;
+
+// Defaults (triggers ONLY if value is undefined):
+const { role = "guest" } = user;
+```
+
+---
+
+### 2. Spread (`...`) vs Rest (`...`)
+* **Spread (`...`):** Unpacks / expands items. Used on the **right side** of `=`:
+  ```javascript
+  const copy = [...arr];
+  Math.max(...numbers);
+  ```
+* **Rest (`...`):** Gathers / collects items into an array. Used on the **left side** of `=` or function parameter lists:
+  ```javascript
+  const [first, ...remaining] = [10, 20, 30, 40];
+  function logAll(...args) {}
+  ```
+
+---
+
+### 3. Optional Chaining (`?.`)
+* Evaluates to `undefined` if the operand before `?.` is `null` or `undefined`, preventing crashes:
+  ```javascript
+  const city = order?.customer?.address?.city;
+  props.onClick?.(); // Safe function invocation
+  ```
+
+---
+
+# Topic 8: Functional Array Methods
+
+```
++-----------+-------------------------+-----------------------------------------+
+|  METHOD   |       INPUT -> OUTPUT   |              MENTAL MODEL               |
++-----------+-------------------------+-----------------------------------------+
+| .map()    |  N items -> N items     | Transform every single item 1-to-1     |
+| .filter() |  N items -> <= N items  | Keep only items matching a condition    |
+| .find()   |  N items -> 1 item      | Return FIRST match and STOP immediately |
+| .some()   |  N items -> boolean     | Is AT LEAST ONE item matching?          |
+| .every()  |  N items -> boolean     | Are ALL items matching?                 |
+| .reduce() |  N items -> Single val  | Fold array into sum, object, or map     |
++-----------+-------------------------+-----------------------------------------+
+```
+
+### Senior Performance: `.find()` vs `.filter()[0]`
+* `.filter()[0]` checks every single element in the array and creates a new array in memory.
+* **`.find()` stops immediately** on the first match (huge performance boost on large datasets).
+
+### Mastering `.reduce()`
+```javascript
+// 1. Net Balance Calculation:
+const balance = transactions.reduce((acc, t) => {
+  return t.type === "credit" ? acc + t.amount : acc - t.amount;
+}, 0);
+
+// 2. Grouping Objects by Status:
+const grouped = orders.reduce((acc, order) => {
+  (acc[order.status] ??= []).push(order);
+  return acc;
+}, {});
+```
+> **Warning:** Always provide an initial value (`, 0` or `, {}`). Calling `.reduce()` on an empty array without an initial value crashes with `TypeError`.
+
+---
+
+# Topic 9: Closures, Higher-Order Functions & React Stale Closures
+
+### 1. The Backpack Model of Closures
+* A **Closure** is a function bundled together with references to its surrounding lexical environment.
+* When a function is born, it packs all variables in its scope into an invisible "backpack". Even when the parent function has finished executing, the inner function retains its backpack on the **Heap**.
+
+---
+
+### 2. Real-World Use Case: `debounce()`
+```javascript
+function debounce(fn, delayMs) {
+  let timerId; // Stored in the closure backpack!
+
+  return function(...args) {
+    clearTimeout(timerId); // Reset previous timer
+    timerId = setTimeout(() => fn(...args), delayMs);
+  };
+}
+```
+
+---
+
+### 3. The React "Stale Closure" Bug
+```jsx
+useEffect(() => {
+  const timer = setInterval(() => {
+    // 💥 Stale closure: captures count = 0 from mount render!
+    setCount(count + 1); // Permanently stuck computing 0 + 1 = 1!
+  }, 1000);
+  return () => clearInterval(timer);
+}, []); // Empty dependency array
+
+// ✅ FIX: Use functional state updater:
+setCount((prev) => prev + 1);
+```
+
+---
+
+# Topic 10: The `this` Keyword, Explicit Binding & Prototypes
+
+### 1. The 4 Rules Determining `this`
+1. **Default Binding:** Standalone call `fn()` $\rightarrow$ `undefined` (in strict mode / ESM) or `window`.
+2. **Implicit Binding:** Object method `obj.fn()` $\rightarrow$ `this` is `obj` (the object before the dot).
+3. **Explicit Binding:** `.call(ctx)`, `.apply(ctx)` $\rightarrow$ `this` is explicitly set to `ctx`.
+4. **New Binding:** `new Fn()` $\rightarrow$ `this` is a brand-new instance object `{}`.
+5. **Arrow Functions:** **No own `this`** (lexically borrowed from enclosing scope).
+
+---
+
+### 2. `.call()` vs `.apply()` vs `.bind()`
+* **`.call(ctx, a, b)`:** Executes immediately with comma-separated arguments.
+* **`.apply(ctx, [a, b])`:** Executes immediately with an **Array** of arguments.
+* **`.bind(ctx)`:** Does NOT execute immediately; returns a new function with `this` **permanently locked**.
+
+> **The Permanent `.bind()` Lock:**
+> Once a function is bound with `.bind(objA)`, calling `.call(objB)` on it later will **STILL execute with `objA`**! It can never be re-bound.
+
+---
+
+### 3. Prototypes Under the Hood
+* JavaScript `class` syntax is **syntactic sugar over prototype chains**.
+* Methods defined in a class live on `Class.prototype`, not on the individual object instances. 10,000 instances share **one single function in memory**.
+* Private fields use the `#` prefix (`#password`) and are enforced natively by the V8 engine.

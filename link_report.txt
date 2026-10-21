@@ -1,0 +1,548 @@
+ERR	http://localhost	<urlopen error [Errno 61] Connection refused>
+OK 200	http://localhost:3000	
+HTTP 404	http://localhost:3000/api	
+HTTP 404	http://localhost:3000/orders	
+OK 200	http://localhost:5173	
+OK 200	https://12factor.net/	
+OK 200	https://12factor.net/config	
+OK 200	https://alembic.sqlalchemy.org/en/latest/autogenerate.html	
+OK 200	https://alembic.sqlalchemy.org/en/latest/cookbook.html	
+OK 200	https://alembic.sqlalchemy.org/en/latest/tutorial.html	
+ERR	https://api.com	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+ERR	https://api.example.com/items	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+ERR	https://api.example.com/products	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+HTTP 402	https://app.com	
+ERR	https://app.example.com	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+OK 200	https://asgi.readthedocs.io/en/latest/	
+OK 200	https://aws.amazon.com/free/	
+OK 200	https://brew.sh/	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html	
+OK 200	https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html	
+OK 200	https://code.claude.com/docs/en/best-practices	
+OK 200	https://code.visualstudio.com/docs/setup/setup-overview	
+OK 200	https://code.visualstudio.com/docs/terminal/basics	
+OK 200	https://cutshort.io/job/Generative-AI-Engineer-Bengaluru-Bangalore-Delhi-Gurugram-Noida-Ghaziabad-Faridabad-Hyderabad-Mumbai-Chennai-Pune-Gravity-Engineering-Services-Pvt-Ltd-tKcXpfK5	
+OK 200	https://cxotoday.com/research/indias-job-postings-rebound-8-3-yoy-snapping-three-month-decline/	
+OK 200	https://cxotoday.com/research/skills-over-degrees-nasscom-indeed-report-reveals-indias-evolving-ai-hiring-landscape/	
+OK 200	https://developer.chrome.com/docs/devtools	
+OK 200	https://developer.hashicorp.com/terraform/intro	
+OK 200	https://developer.mozilla.org	
+OK 200	https://developer.mozilla.org/docs/Learn_web_development/Getting_started/Environment_setup/Command_line	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Positioning	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Responsive_design	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Debugging_JavaScript	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Event_bubbling	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Box_model	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms	
+OK 200	https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_Web_works	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/Accessibility	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Caching	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Session	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Equality_comparisons_and_sameness	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Memory_management	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/Performance	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Lazy_loading	
+OK 200	https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy	
+OK 200	https://developers.openai.com/api/docs/assistants/migration	
+OK 200	https://developers.openai.com/api/docs/guides/embeddings	
+OK 200	https://developers.openai.com/api/docs/guides/evals	
+OK 200	https://developers.openai.com/api/docs/guides/function-calling	
+OK 200	https://developers.openai.com/api/docs/guides/migrate-to-responses	
+OK 200	https://developers.openai.com/api/docs/guides/streaming-responses	
+OK 200	https://developers.openai.com/api/docs/guides/structured-outputs	
+OK 200	https://developers.openai.com/api/docs/guides/text	
+OK 200	https://docs.astral.sh/ruff/	
+OK 200	https://docs.astral.sh/uv/	
+OK 200	https://docs.astral.sh/uv/guides/integration/docker/	
+OK 200	https://docs.astral.sh/uv/guides/projects/	
+OK 200	https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html	
+OK 200	https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html	
+OK 200	https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html	
+OK 200	https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html	
+OK 200	https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html	
+OK 200	https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html	
+OK 200	https://docs.aws.amazon.com/AmazonECS/latest/developerguide/express-service-overview.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/PostgreSQLReleaseNotes/postgresql-extensions.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RestoreFromSnapshot.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html	
+OK 200	https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html	
+OK 200	https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html	
+OK 200	https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html	
+OK 200	https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html	
+OK 200	https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html	
+OK 200	https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html	
+OK 200	https://docs.aws.amazon.com/accounts/latest/reference/root-user-best-practices.html	
+OK 200	https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html	
+OK 200	https://docs.aws.amazon.com/apprunner/latest/dg/what-is-apprunner.html	
+OK 200	https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html	
+OK 200	https://docs.aws.amazon.com/decision-guides/latest/containers-on-aws-how-to-choose/choosing-aws-container-service.html	
+OK 200	https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html	
+OK 200	https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html	
+OK 200	https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html	
+OK 200	https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html	
+OK 200	https://docs.bullmq.io	
+OK 200	https://docs.docker.com/build/building/best-practices/	
+OK 200	https://docs.docker.com/build/building/multi-stage/	
+OK 200	https://docs.docker.com/build/ci/github-actions/	
+OK 200	https://docs.docker.com/compose/	
+OK 200	https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/	
+OK 200	https://docs.docker.com/compose/how-tos/production/	
+OK 200	https://docs.docker.com/compose/how-tos/startup-order/	
+OK 200	https://docs.docker.com/engine/storage/volumes/	
+OK 200	https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/	
+OK 200	https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/	
+OK 200	https://docs.docker.com/reference/compose-file/	
+OK 200	https://docs.github.com/en/account-and-profile/how-tos/profile-customization/managing-your-profile-readme	
+OK 200	https://docs.github.com/en/account-and-profile/how-tos/profile-customization/pinning-items-to-your-profile	
+OK 200	https://docs.github.com/en/actions/get-started/understand-github-actions	
+OK 200	https://docs.github.com/en/actions/how-tos/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services	
+OK 200	https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions	
+OK 200	https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions	
+OK 200	https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-nodejs	
+OK 200	https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-python	
+OK 200	https://docs.github.com/en/actions/writing-workflows/quickstart	
+OK 200	https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning	
+OK 200	https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests	
+OK 200	https://docs.langchain.com/langsmith/evaluation	
+OK 200	https://docs.langchain.com/oss/python/langchain/overview	
+OK 200	https://docs.langchain.com/oss/python/langgraph/durable-execution	
+OK 200	https://docs.langchain.com/oss/python/langgraph/interrupts	
+OK 200	https://docs.langchain.com/oss/python/langgraph/overview	
+OK 200	https://docs.langchain.com/oss/python/langgraph/persistence	
+OK 200	https://docs.langchain.com/oss/python/langgraph/streaming	
+OK 200	https://docs.langchain.com/oss/python/langgraph/test	
+OK 200	https://docs.langchain.com/oss/python/langgraph/workflows-agents	
+OK 200	https://docs.npmjs.com/about-npm	
+OK 200	https://docs.npmjs.com/cli/v10/commands/npx	
+OK 200	https://docs.pydantic.dev/latest/concepts/models/	
+OK 200	https://docs.pydantic.dev/latest/concepts/pydantic_settings/	
+OK 200	https://docs.pydantic.dev/latest/concepts/validators/	
+OK 200	https://docs.pytest.org/en/stable/	
+OK 200	https://docs.pytest.org/en/stable/getting-started.html	
+OK 200	https://docs.pytest.org/en/stable/how-to/fixtures.html	
+OK 200	https://docs.pytest.org/en/stable/how-to/monkeypatch.html	
+OK 200	https://docs.pytest.org/en/stable/how-to/parametrize.html	
+OK 200	https://docs.python.org/3/howto/functional.html	
+OK 200	https://docs.python.org/3/howto/logging.html	
+OK 200	https://docs.python.org/3/library/asyncio.html	
+OK 200	https://docs.python.org/3/library/contextlib.html	
+OK 200	https://docs.python.org/3/library/csv.html	
+OK 200	https://docs.python.org/3/library/dataclasses.html	
+OK 200	https://docs.python.org/3/library/enum.html	
+OK 200	https://docs.python.org/3/library/functools.html	
+OK 200	https://docs.python.org/3/library/json.html	
+OK 200	https://docs.python.org/3/library/logging.html	
+OK 200	https://docs.python.org/3/library/pathlib.html	
+OK 200	https://docs.python.org/3/library/typing.html	
+OK 200	https://docs.python.org/3/library/venv.html	
+OK 200	https://docs.python.org/3/tutorial/classes.html	
+OK 200	https://docs.python.org/3/tutorial/datastructures.html	
+OK 200	https://docs.python.org/3/tutorial/errors.html	
+OK 200	https://docs.python.org/3/tutorial/index.html	
+OK 200	https://docs.python.org/3/tutorial/inputoutput.html	
+OK 200	https://docs.sqlalchemy.org/en/20/	
+OK 200	https://docs.sqlalchemy.org/en/20/core/pooling.html	
+OK 200	https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html	
+OK 200	https://docs.sqlalchemy.org/en/20/orm/quickstart.html	
+OK 200	https://docs.sqlalchemy.org/en/20/orm/session_basics.html	
+OK 200	https://docs.sqlalchemy.org/en/20/orm/session_transaction.html	
+OK 200	https://docs.sqlalchemy.org/en/20/tutorial/index.html	
+OK 200	https://docs.stripe.com/api/idempotent_requests	
+OK 200	https://dummyjson.com/docs	
+OK 200	https://dummyjson.com/products?limit=20	
+OK 200	https://example.com	
+HTTP 404	https://example.com/products	
+OK 200	https://expressjs.com/en/advanced/best-practice-security.html	
+OK 200	https://expressjs.com/en/blog/2025-03-31-v5-1-latest-release	
+OK 200	https://expressjs.com/en/guide/error-handling.html	
+OK 200	https://expressjs.com/en/guide/migrating-5.html	
+OK 200	https://expressjs.com/en/guide/routing.html	
+OK 200	https://expressjs.com/en/guide/using-middleware.html	
+OK 200	https://expressjs.com/en/guide/writing-middleware.html	
+OK 200	https://fastapi.tiangolo.com/advanced/custom-response/	
+OK 200	https://fastapi.tiangolo.com/advanced/events/	
+OK 200	https://fastapi.tiangolo.com/advanced/settings/	
+OK 200	https://fastapi.tiangolo.com/advanced/testing-dependencies/	
+OK 200	https://fastapi.tiangolo.com/advanced/websockets/	
+OK 200	https://fastapi.tiangolo.com/async/	
+OK 200	https://fastapi.tiangolo.com/deployment/	
+OK 200	https://fastapi.tiangolo.com/deployment/docker/	
+OK 200	https://fastapi.tiangolo.com/tutorial/	
+OK 200	https://fastapi.tiangolo.com/tutorial/background-tasks/	
+OK 200	https://fastapi.tiangolo.com/tutorial/bigger-applications/	
+OK 200	https://fastapi.tiangolo.com/tutorial/body/	
+OK 200	https://fastapi.tiangolo.com/tutorial/cors/	
+OK 200	https://fastapi.tiangolo.com/tutorial/dependencies/	
+OK 200	https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/	
+OK 200	https://fastapi.tiangolo.com/tutorial/first-steps/	
+OK 200	https://fastapi.tiangolo.com/tutorial/handling-errors/	
+OK 200	https://fastapi.tiangolo.com/tutorial/metadata/	
+OK 200	https://fastapi.tiangolo.com/tutorial/middleware/	
+OK 200	https://fastapi.tiangolo.com/tutorial/path-params/	
+OK 200	https://fastapi.tiangolo.com/tutorial/query-params/	
+OK 200	https://fastapi.tiangolo.com/tutorial/request-files/	
+OK 200	https://fastapi.tiangolo.com/tutorial/response-model/	
+OK 200	https://fastapi.tiangolo.com/tutorial/response-status-code/	
+OK 200	https://fastapi.tiangolo.com/tutorial/security/	
+OK 200	https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/	
+OK 200	https://fastapi.tiangolo.com/tutorial/server-sent-events/	
+OK 200	https://fastapi.tiangolo.com/tutorial/sql-databases/	
+OK 200	https://fastapi.tiangolo.com/tutorial/testing/	
+OK 200	https://genai.owasp.org/llm-top-10/	
+OK 200	https://getpino.io	
+OK 200	https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F	
+OK 200	https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging	
+OK 200	https://git-scm.com/docs/gitignore	
+OK 200	https://github.com/express-rate-limit/express-rate-limit	
+OK 200	https://github.com/expressjs/cors	
+OK 200	https://github.com/expressjs/multer	
+OK 200	https://github.com/ladjs/supertest	
+OK 200	https://github.com/nvm-sh/nvm	
+OK 200	https://github.com/pgvector/pgvector	
+OK 200	https://github.com/pgvector/pgvector-python	
+OK 200	https://github.com/ranisalt/node-argon2	
+OK 200	https://github.com/salsita/node-pg-migrate	
+OK 200	https://github.com/websockets/ws	
+OK 200	https://hamel.dev/blog/posts/evals-faq/	
+OK 200	https://helmetjs.github.io	
+ERR	https://host	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+OK 200	https://infoq.com/news/2026/08/typescript-7-released/	
+OK 200	https://javascript.info/async	
+OK 200	https://javascript.info/closure	
+OK 200	https://javascript.info/event-loop	
+OK 200	https://jobs.645ventures.com/companies/arbor-2-c1cd2b7f-56ad-4ca3-ad99-6f2ac9e0fb62/jobs/52964763-senior-full-stack-engineer	
+OK 200	https://jobs.recooty.com/engineerbabu-it-services-pvt-ltd-/full-stack-engineer-en334	
+OK 200	https://jsonplaceholder.typicode.com	
+HTTP 404	https://jsonplaceholder.typicode.com/nope	
+OK 200	https://jsonplaceholder.typicode.com/posts	
+OK 200	https://jsonplaceholder.typicode.com/posts?userId=1	
+OK 200	https://jsonplaceholder.typicode.com/todos	
+OK 200	https://jsonplaceholder.typicode.com/todos/1	
+OK 200	https://jsonplaceholder.typicode.com/todos?userId=1	
+HTTP 404	https://jsonplaceholder.typicode.com/users/${id}	
+OK 200	https://jsonplaceholder.typicode.com/users/1	
+OK 200	https://langfuse.com/docs/observability/overview	
+OK 200	https://learn.microsoft.com/en-us/windows/package-manager/winget/	
+OK 200	https://learn.microsoft.com/en-us/windows/wsl/install	
+OK 200	https://martinfowler.com/articles/practical-test-pyramid.html	
+OK 200	https://martinfowler.com/bliki/MonolithFirst.html	
+OK 200	https://microservices.io/patterns/microservices.html	
+OK 200	https://mongoosejs.com/docs/guide.html	
+OK 200	https://mswjs.io/docs/	
+OK 200	https://mypy.readthedocs.io/en/stable/	
+OK 200	https://neetcode.io/roadmap	
+OK 200	https://nextjs.org/docs/app	
+OK 200	https://nextjs.org/docs/app/api-reference/components/image	
+OK 200	https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents	
+OK 200	https://nextjs.org/docs/app/api-reference/config/next-config-js/output	
+OK 200	https://nextjs.org/docs/app/api-reference/directives/use-cache	
+OK 200	https://nextjs.org/docs/app/api-reference/directives/use-client	
+OK 200	https://nextjs.org/docs/app/api-reference/file-conventions/error	
+OK 200	https://nextjs.org/docs/app/api-reference/file-conventions/loading	
+OK 200	https://nextjs.org/docs/app/api-reference/file-conventions/not-found	
+OK 200	https://nextjs.org/docs/app/api-reference/file-conventions/proxy	
+OK 200	https://nextjs.org/docs/app/api-reference/file-conventions/route	
+OK 200	https://nextjs.org/docs/app/api-reference/functions/generate-metadata	
+OK 200	https://nextjs.org/docs/app/api-reference/functions/use-search-params	
+OK 200	https://nextjs.org/docs/app/getting-started/caching	
+OK 200	https://nextjs.org/docs/app/getting-started/deploying	
+OK 200	https://nextjs.org/docs/app/getting-started/error-handling	
+OK 200	https://nextjs.org/docs/app/getting-started/fetching-data	
+OK 200	https://nextjs.org/docs/app/getting-started/images	
+OK 200	https://nextjs.org/docs/app/getting-started/installation	
+OK 200	https://nextjs.org/docs/app/getting-started/layouts-and-pages	
+OK 200	https://nextjs.org/docs/app/getting-started/linking-and-navigating	
+OK 200	https://nextjs.org/docs/app/getting-started/metadata-and-og-images	
+OK 200	https://nextjs.org/docs/app/getting-started/mutating-data	
+OK 200	https://nextjs.org/docs/app/getting-started/project-structure	
+OK 200	https://nextjs.org/docs/app/getting-started/revalidating	
+OK 200	https://nextjs.org/docs/app/getting-started/route-handlers	
+OK 200	https://nextjs.org/docs/app/getting-started/server-and-client-components	
+OK 200	https://nextjs.org/docs/app/guides/authentication	
+OK 200	https://nextjs.org/docs/app/guides/caching-without-cache-components	
+OK 200	https://nextjs.org/docs/app/guides/content-security-policy	
+OK 200	https://nextjs.org/docs/app/guides/data-security	
+OK 200	https://nextjs.org/docs/app/guides/environment-variables	
+OK 200	https://nextjs.org/docs/app/guides/forms	
+OK 200	https://nextjs.org/docs/app/guides/instant-navigation	
+OK 200	https://nextjs.org/docs/app/guides/migrating-to-cache-components	
+OK 200	https://nextjs.org/docs/app/guides/production-checklist	
+OK 200	https://nextjs.org/docs/app/guides/self-hosting	
+OK 200	https://nextjs.org/docs/app/guides/server-actions	
+OK 200	https://nextjs.org/docs/app/guides/streaming	
+OK 200	https://nextjs.org/docs/app/guides/testing	
+OK 200	https://nextjs.org/docs/app/guides/upgrading/version-16	
+OK 200	https://node-postgres.com/features/pooling	
+OK 200	https://nodejs.org/api/test.html	
+OK 200	https://nodejs.org/dist/index.json	
+OK 200	https://nodejs.org/en/download	
+OK 200	https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick	
+OK 200	https://nodejs.org/en/learn/getting-started/introduction-to-nodejs	
+OK 200	https://nodejs.org/en/learn/getting-started/security-best-practices	
+OK 200	https://noembed.com/embed	
+OK 200	https://opentelemetry.io/docs/languages/python/	
+OK 200	https://opentelemetry.io/docs/specs/semconv/gen-ai/	
+OK 200	https://orm.drizzle.team/docs/overview	
+OK 200	https://owasp.org/API-Security/editions/2023/en/0x00-header/	
+OK 200	https://owasp.org/projects/top-10-for-large-language-model-applications	
+OK 200	https://owasp.org/www-project-top-ten/	
+OK 200	https://packaging.python.org/en/latest/guides/writing-pyproject-toml/	
+OK 200	https://packaging.python.org/en/latest/tutorials/installing-packages/	
+OK 200	https://platform.claude.com/docs/en/about-claude/models/overview	
+OK 200	https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls	
+OK 200	https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview	
+OK 200	https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use	
+OK 200	https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner	
+OK 200	https://platform.claude.com/docs/en/api/errors	
+OK 200	https://platform.claude.com/docs/en/api/overview	
+OK 200	https://platform.claude.com/docs/en/api/rate-limits	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/embeddings	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/prompt-caching	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/streaming	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/structured-outputs	
+OK 200	https://platform.claude.com/docs/en/build-with-claude/token-counting	
+OK 200	https://platform.claude.com/docs/en/test-and-evaluate/develop-tests	
+OK 200	https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks	
+OK 200	https://playwright.dev/docs/intro	
+OK 200	https://pydantic.dev/docs/validation/latest/get-started/migration/	
+OK 200	https://pyjwt.readthedocs.io/en/stable/	
+OK 200	https://pypi.org/project/anthropic/	
+OK 200	https://pypi.org/project/langgraph/	
+OK 200	https://pypi.org/project/openai/	
+OK 200	https://pypi.org/project/pgvector/	
+OK 200	https://pypi.org/project/pypdf/	
+OK 200	https://pypi.org/project/tiktoken/	
+OK 200	https://react.dev/blog/2024/12/05/react-19	
+OK 200	https://react.dev/blog/2025/10/01/react-19-2	
+OK 200	https://react.dev/learn/choosing-the-state-structure	
+OK 200	https://react.dev/learn/passing-data-deeply-with-context	
+OK 200	https://react.dev/learn/preserving-and-resetting-state	
+OK 200	https://react.dev/learn/queueing-a-series-of-state-updates	
+OK 200	https://react.dev/learn/react-compiler	
+OK 200	https://react.dev/learn/react-developer-tools	
+OK 200	https://react.dev/learn/removing-effect-dependencies	
+OK 200	https://react.dev/learn/render-and-commit	
+OK 200	https://react.dev/learn/rendering-lists	
+OK 200	https://react.dev/learn/scaling-up-with-reducer-and-context	
+OK 200	https://react.dev/learn/separating-events-from-effects	
+OK 200	https://react.dev/learn/state-as-a-snapshot	
+OK 200	https://react.dev/learn/synchronizing-with-effects	
+OK 200	https://react.dev/learn/typescript	
+OK 200	https://react.dev/learn/you-might-not-need-an-effect	
+OK 200	https://react.dev/reference/react-dom/components/form	
+OK 200	https://react.dev/reference/react/Profiler	
+OK 200	https://react.dev/reference/react/Suspense	
+OK 200	https://react.dev/reference/react/cache	
+OK 200	https://react.dev/reference/react/memo	
+OK 200	https://react.dev/reference/react/use	
+OK 200	https://react.dev/reference/react/useActionState	
+OK 200	https://react.dev/reference/react/useCallback	
+OK 200	https://react.dev/reference/react/useEffect	
+OK 200	https://react.dev/reference/react/useEffectEvent	
+OK 200	https://react.dev/reference/react/useMemo	
+OK 200	https://react.dev/reference/rsc/server-components	
+OK 200	https://react.dev/reference/rsc/server-functions	
+OK 200	https://registry.npmjs.org/-/package/express/dist-tags	
+OK 200	https://registry.npmjs.org/express/latest	
+OK 200	https://registry.npmjs.org/typescript	
+OK 200	https://roadmap.sh/system-design	
+OK 200	https://southasiacareers.deloitte.com/job/Bengaluru-Senior-Associate-Engineering-Foundry-&-Managed-Services-Bengaluru-Engineering-as-a-Service-Op/50759144/	
+OK 200	https://sqlmodel.tiangolo.com/	
+OK 200	https://sre.google/sre-book/table-of-contents/	
+OK 200	https://stackoverflow.blog/2025/07/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/	
+OK 200	https://stackoverflow.com/help/how-to-ask	
+OK 200	https://survey.stackoverflow.co/2025/technology	
+OK 200	https://tailwindcss.com/docs/installation	
+OK 200	https://tailwindcss.com/docs/responsive-design	
+OK 200	https://tanstack.com/query/latest	
+OK 200	https://tanstack.com/table/latest	
+OK 200	https://testing-library.com/docs/queries/about	
+OK 200	https://testing-library.com/docs/react-testing-library/intro/	
+OK 200	https://testing-library.com/docs/user-event/intro	
+OK 200	https://top10.owasp.org/2025/	
+OK 200	https://ui.shadcn.com/docs	
+OK 200	https://use-the-index-luke.com/no-offset	
+OK 200	https://uvicorn.dev/deployment/	
+OK 200	https://vercel.com/docs/frameworks/nextjs	
+OK 200	https://vitest.dev	
+OK 200	https://vitest.dev/guide/	
+OK 200	https://web.dev/articles/lcp	
+OK 200	https://web.dev/articles/optimize-cls	
+OK 200	https://web.dev/learn/accessibility	
+OK 200	https://web.dev/learn/css	
+OK 200	https://web.dev/learn/html	
+OK 200	https://web.dev/learn/images	
+OK 200	https://wellfound.com/jobs/4691299-agentic-ai-engineer	
+OK 200	https://www.angelone.in/news/stocks/info-edge-s-naukri-jobspeak-report-white-collar-hiring-up-5-in-july-2026-ai-ml-roles-lead-growth	
+OK 200	https://www.anthropic.com/engineering/building-effective-agents	
+OK 200	https://www.beroeinc.com/careers-vacancies/full-stack-ai-engineer/	
+OK 200	https://www.conventionalcommits.org/en/v1.0.0/	
+OK 200	https://www.freecodecamp.org/news/command-line-basics-for-beginners	
+OK 200	https://www.freecodecamp.org/news/creating-apis-with-python-free-19-hour-course/	
+OK 200	https://www.freecodecamp.org/news/fastapi-helps-you-develop-apis-quickly	
+OK 200	https://www.freecodecamp.org/news/git-and-github-crash-course-for-beginners/	
+OK 200	https://www.freecodecamp.org/news/git-and-github-crash-course/	
+OK 200	https://www.freecodecamp.org/news/learn-javascript-free-js-courses-for-beginners/	
+OK 200	https://www.freecodecamp.org/news/learn-langgraph-and-build-conversational-ai-with-python/	
+OK 200	https://www.freecodecamp.org/news/learn-typescript-with-this-crash-course/	
+OK 200	https://www.freecodecamp.org/news/python-programming-course/	
+OK 200	https://www.freecodecamp.org/news/testing-in-python-with-pytest/	
+OK 200	https://www.mongodb.com/docs/manual/core/aggregation-pipeline/	
+OK 200	https://www.mongodb.com/docs/manual/core/indexes/	
+OK 200	https://www.mongodb.com/docs/manual/core/schema-validation/	
+OK 200	https://www.mongodb.com/docs/manual/core/transactions/	
+OK 200	https://www.mongodb.com/docs/manual/crud/	
+OK 200	https://www.mongodb.com/docs/manual/data-modeling/	
+OK 200	https://www.mongodb.com/docs/manual/tutorial/model-embedded-one-to-many-relationships-between-documents/	
+OK 200	https://www.pgadmin.org	
+OK 200	https://www.postgresql.org/docs/current/app-pgdump.html	
+OK 200	https://www.postgresql.org/docs/current/app-pgrestore.html	
+OK 200	https://www.postgresql.org/docs/current/backup.html	
+OK 200	https://www.postgresql.org/docs/current/continuous-archiving.html	
+OK 200	https://www.postgresql.org/docs/current/ddl-constraints.html	
+OK 200	https://www.postgresql.org/docs/current/explicit-locking.html	
+OK 200	https://www.postgresql.org/docs/current/indexes.html	
+OK 200	https://www.postgresql.org/docs/current/queries-limit.html	
+ERR	https://www.postgresql.org/docs/current/queries-with.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+ERR	https://www.postgresql.org/docs/current/sql-createindex.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+ERR	https://www.postgresql.org/docs/current/textsearch.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+OK 200	https://www.postgresql.org/docs/current/transaction-iso.html	
+ERR	https://www.postgresql.org/docs/current/tutorial-agg.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+ERR	https://www.postgresql.org/docs/current/tutorial-join.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+OK 200	https://www.postgresql.org/docs/current/tutorial-sql.html	
+OK 200	https://www.postgresql.org/docs/current/tutorial-transactions.html	
+ERR	https://www.postgresql.org/docs/current/tutorial-window.html	<urlopen error EOF occurred in violation of protocol (_ssl.c:992)>
+OK 200	https://www.postgresql.org/docs/current/using-explain.html	
+OK 200	https://www.prisma.io/docs	
+OK 200	https://www.python-httpx.org/	
+OK 200	https://www.python-httpx.org/async/	
+OK 200	https://www.python.org/downloads/	
+OK 200	https://www.thecore.in/business/ai-dampens-tech-hiring-in-india-23-growth-in-fy26-vs-fy25-859053	
+OK 200	https://www.typescriptlang.org/docs/handbook/2/everyday-types.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/2/generics.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/2/narrowing.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/2/objects.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/2/types-from-types.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/enums.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/intro.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/tsconfig-json.html	
+OK 200	https://www.typescriptlang.org/docs/handbook/utility-types.html	
+OK 200	https://www.typescriptlang.org/tsconfig/	
+OK 200	https://www.w3.org/WAI/ARIA/apg/	
+OK 200	https://www.weekday.works/jobs/backend-developer-jobs-in-india	
+OK 200	https://www.weekday.works/jobs/devops-engineer-jobs-in-india-18	
+OK 200	https://www.weekday.works/jobs/ml-ai-engineering-jobs	
+BAD: no video found	https://www.youtube.com/oembed?url=<watch	no matching providers found
+BAD: no video found	https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=8hly31xKli0&format=json	404 Not Found
+BAD: no video found	https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=F2FmTdLtb_4&format=json	404 Not Found
+BAD: no video found	https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=dZTkBeB_dmg&format=json	404 Not Found
+BAD: no video found	https://www.youtube.com/playlist?list=PL4cUxeGkcC9gUgr39Q_yD6v-bSyMwKPUI	no matching providers found
+BAD: no video found	https://www.youtube.com/playlist?list=PL8p2I9GklV47v6WZTjHAqdsHxpTIpjRwn	no matching providers found
+BAD: no video found	https://www.youtube.com/playlist?list=PLu0W_9lII9agwh1XjRt242xIpHhPT2llg	no matching providers found
+BAD: no video found	https://www.youtube.com/playlist?list=PLu71SKxNbfoBuX3f4EOACle2y-tRC5Q37	no matching providers found
+OK	https://www.youtube.com/watch?v=-56x56UppqQ	MongoDB Crash Course | Traversy Media
+OK	https://www.youtube.com/watch?v=02Y1Bciz8jk	MongoDB Crash Course (Hindi) | Geeky Shows
+OK	https://www.youtube.com/watch?v=0ik6X4DJKCc	JavaScript DOM Crash Course - Part 1 | Traversy Media
+OK	https://www.youtube.com/watch?v=0sOvCWFmrtA	Python API Development - Comprehensive Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=1XbvNSwvkAs	What happens when you click a URL: DNS Lookup, TCP Handshake & HTTP IN 3 MINUTES (With Visuals) | JayPMedia
+OK	https://www.youtube.com/watch?v=2pZmKW9-I_k	TypeScript Tutorial #1 - Introduction & Setup | Net Ninja
+OK	https://www.youtube.com/watch?v=31EmOKBP1PY	A beginners guide to EXPLAIN ANALYZE – Michael Christofides | Tiger Data (creators of TimescaleDB)
+OK	https://www.youtube.com/watch?v=3c-iBn73dDE	Docker Tutorial for Beginners [FULL COURSE in 3 Hours] | TechWorld with Nana
+OK	https://www.youtube.com/watch?v=3r4Ja7i763c	How Node.js Works | Node.js Architecture, Event Loop | Node.js Tutorial for Beginners in Hindi/Urdu | IT-Learners
+OK	https://www.youtube.com/watch?v=7AuVarlhOtM	Secure Your AI in 16 Minutes: OWASP Top 10 for LLM Apps (2025) | SecureTechIn
+OK	https://www.youtube.com/watch?v=8Xwq35cPwYg	React Testing for Beginners: Start Here! | Programming with Mosh
+OK	https://www.youtube.com/watch?v=8aGhZQkoFbQ	What the heck is the event loop anyway? | Philip Roberts | JSConf EU | JSConf
+OK	https://www.youtube.com/watch?v=8hly31xKli0	Algorithms and Data Structures Tutorial - Full Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=9Ay0WcjrdGE	LLM Evals and LLM as a Judge: Fundamentals | Arize AI
+OK	https://www.youtube.com/watch?v=9VOR-61BaGI	AWS EC2, S3, और Lambda: Cloud Basics for Beginners! (Free Tier Setup ☁️) | CodeWithU
+OK	https://www.youtube.com/watch?v=CnH3kAXSrmU	Express Crash Course | Traversy Media
+OK	https://www.youtube.com/watch?v=D7_ipDqhtwk	How We Build Effective Agents: Barry Zhang, Anthropic | AI Engineer
+OK	https://www.youtube.com/watch?v=DJvM2lSPn6w	Next.js App Router Authentication (Sessions, Cookies, JWTs) | leerob
+OK	https://www.youtube.com/watch?v=DdvhZj7SsEM	MongoDB Crash Course - Schemas and Relationships | The Full Stack Junkie
+OK	https://www.youtube.com/watch?v=F2FmTdLtb_4	System Design Concepts Course and Interview Prep | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=FwOTs4UxQS4	AI Agents, Clearly Explained | Jeff Su
+OK	https://www.youtube.com/watch?v=GAIbn16Iytc	Immediately Invoked Function Expressions IIFE | chai aur #javascript | Chai aur Code
+OK	https://www.youtube.com/watch?v=LZq0G8WUaII	Node Auth Tutorial (JWT) #10 - JSON Web Tokens (theory) | Net Ninja
+OK	https://www.youtube.com/watch?v=MTcPrTIBkpA	Next.js Explained: Partial Prerendering (PPR) | Delba
+OK	https://www.youtube.com/watch?v=NZJUEzn10FI	New React useEffectEvent Hook Crash Course | Web Dev Simplified
+OK	https://www.youtube.com/watch?v=Oive66jrwBs	Fetch API Introduction | Traversy Media
+OK	https://www.youtube.com/watch?v=R8_veQiYBjI	GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker | TechWorld with Nana
+OK	https://www.youtube.com/watch?v=ROjZy1WbCIA	Linux Operating System - Crash Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=SO7m7nod0ts	Python FastAPI Tutorial (Part 17): Testing the API - Pytest, Fixtures, and Mocking External Services | Corey Schafer
+OK	https://www.youtube.com/watch?v=T9aRN5JkmL8	AI prompt engineering: A deep dive | Anthropic
+OK	https://www.youtube.com/watch?v=UKn4aVlnB9A	How React works under the Hood | React reconciliation, fibre , diffing , key| ReactJS Full Course #6 | Coder Army
+OK	https://www.youtube.com/watch?v=WJn1rXesTtg	Next.js 16: Master Partial Pre-rendering & Cache Components in 24 Minutes | Clerk
+OK	https://www.youtube.com/watch?v=ZDa-Z5JzLYM	Python OOP Tutorial 1: Classes and Instances | Corey Schafer
+OK	https://www.youtube.com/watch?v=ZvZ7gvcmPmI	Learn TypeScript – Crash Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=aAy-B6KPld8	SQLAlchemy: The BEST SQL Database Library in Python | ArjanCodes
+OK	https://www.youtube.com/watch?v=apPCtKpq8WM	Learn AWS in 60 Minutes – Quick Start with EC2, S3 & RDS! 🚀 | egain
+OK	https://www.youtube.com/watch?v=cHYq1MRoyI0	Pytest Tutorial – How to Test Python Code | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=dDpZfOQBMaU	Using Forms in Next.js (Server Actions, Revalidating Data) | leerob
+OK	https://www.youtube.com/watch?v=dH6i3GurZW8	Mastering React's useEffect | Jack Herrington
+OK	https://www.youtube.com/watch?v=dZTkBeB_dmg	Idempotency in APIs Explained | Why It Matters + Code Example | Arkynate
+OK	https://www.youtube.com/watch?v=eWRfhZUzrAc	Python for Beginners – Full Course [Programming Tutorial] | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=gqZLb6zDJaQ	I Can’t Believe Next.js 16 did This With Caching!🤯Detailed Explanation in Hindi | Day 53/100 | Coder's Gyan
+OK	https://www.youtube.com/watch?v=hdI2bqOjy3c	JavaScript Crash Course For Beginners | Traversy Media
+OK	https://www.youtube.com/watch?v=jGg_1h0qzaM	LangGraph Complete Course for Beginners – Complex AI Agents with Python | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=mABpAI-pCw0	Command Line Basics for Beginners - Full Course | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=mAFoROnOfHs	Git & GitHub Crash Course for Beginners [2026] | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=mbsmsi7l3r4	JWT Authentication Tutorial - Node.js | Web Dev Simplified
+OK	https://www.youtube.com/watch?v=nivyaiCeWjs	Learn SQL Joins | Decomplexify
+OK	https://www.youtube.com/watch?v=pu-FjumEY94	React Reset Component State With the Key Prop | Coding in Flow
+OK	https://www.youtube.com/watch?v=qw--VYLpxG4	Learn PostgreSQL Tutorial - Full Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=qzvfKXynk-I	OWASP Top 10 2025 explained:  What it is, what changed, and how to use it | Codific
+OK	https://www.youtube.com/watch?v=rg7Fvvl3taU	Learn CSS Grid the easy way | Kevin Powell
+OK	https://www.youtube.com/watch?v=sVcwVQRHIc8	Learn RAG From Scratch – Python AI Tutorial from a LangChain Engineer | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=tLKKmouUams	FastAPI Course for Beginners | freeCodeCamp.org
+OK	https://www.youtube.com/watch?v=u044iM9xsWU	Learn flexbox the easy way | Kevin Powell
+OK	https://www.youtube.com/watch?v=uAmRtE52mYk	Exploring React Performance | React Conf
+OK	https://www.youtube.com/watch?v=wjZofJX0v4M	Transformers, the tech behind LLMs | Deep Learning Chapter 5 | 3Blue1Brown
+OK	https://www.youtube.com/watch?v=wlIyQXNVmgU	How to Access S3 from EC2 Using IAM Role (Best Practice | No Access Keys!) | Learn With Atiq
+OK	https://www.youtube.com/watch?v=yY0bKZNYmJs	Let, const and var ki kahani | chai aur #javascript | Chai aur Code
+OK	https://www.youtube.com/watch?v=zduSFxRajkE	Let's build the GPT Tokenizer | Andrej Karpathy
+OK	https://www.youtube.com/watch?v=zjkBMFhNj_g	[1hr Talk] Intro to Large Language Models | Andrej Karpathy
+ERR	https://your-domain/healthz	<urlopen error [Errno 8] nodename nor servname provided, or not known>
+OK 200	https://zod.dev	
+OK 200	https://zod.dev/	
