@@ -477,3 +477,99 @@ setCount((prev) => prev + 1);
 * JavaScript `class` syntax is **syntactic sugar over prototype chains**.
 * Methods defined in a class live on `Class.prototype`, not on the individual object instances. 10,000 instances share **one single function in memory**.
 * Private fields use the `#` prefix (`#password`) and are enforced natively by the V8 engine.
+
+---
+
+# Topic 11: Modules — ES Modules (ESM) vs CommonJS (CJS)
+
+### 1. Comparison Matrix
+| Feature | CommonJS (CJS) | ES Modules (ESM) |
+|---|---|---|
+| **Syntax** | `require()`, `module.exports` | `import`, `export` |
+| **Loading** | Dynamic, synchronous, runtime | Static, parsed before execution |
+| **Tree-Shaking** | ❌ Not possible | ✅ Built-in (removes unused code) |
+| **Top-Level `await`** | ❌ No | ✅ Native support |
+| **`__dirname`** | ✅ Global | ❌ Use `import.meta.dirname` (Node 20+) |
+| **Top-Level `this`** | `module.exports` (`{}`) | `undefined` |
+
+### 2. Best Practices
+* **Use Named Exports:** Prefer `export const add = ...` over `export default` for safer IDE refactoring, auto-complete, and better tree-shaking.
+* **Avoid Circular Imports:** If Module A imports B and B imports A, one receives an uninitialized empty object, causing runtime `TypeError: Cannot read properties of undefined`. Extract shared code into a 3rd file.
+
+---
+
+# Topic 12: Error Handling — `try`, `catch`, `finally` & Custom Errors
+
+### 1. The Anatomy of an Error
+* **Never throw a plain string:** `throw "error"` discards the **Stack Trace** (file, line number, call history).
+* **Always throw an `Error` object:**
+  ```javascript
+  throw new Error("Invalid request", { cause: originalError }); // ES2022 error chaining
+  ```
+
+### 2. The 2 Critical Rules of `finally`
+1. **`finally` ALWAYS runs:** Even if `try` or `catch` has an explicit `return` or `throw`, `finally` executes before leaving the function.
+2. **The `finally` Return Trap:** If you `return` inside `finally`, it **overwrites and discards** any return value or error from `try` or `catch`. Never return from inside `finally`.
+
+### 3. Custom Error Classes (Production Pattern)
+```javascript
+class ApiError extends Error {
+  constructor(statusCode, message) {
+    super(message);
+    this.name = "ApiError";
+    this.statusCode = statusCode;
+  }
+}
+throw new ApiError(404, "User not found");
+```
+
+### 4. The Async Error Trap
+`try/catch` **cannot catch errors from un-awaited Promises**. If you omit `await`, the `try` block exits in 0.001ms, and the subsequent rejection becomes an **Unhandled Promise Rejection**. Always `await` promises inside `try/catch`.
+
+---
+
+# Topic 13: Promises, Async/Await & Promise Chaining
+
+### 1. Definition & Mental Model
+* A **Promise** is a JavaScript object representing the **eventual completion (or failure)** of an asynchronous operation and its resulting value.
+* It is a strict finite state machine with **3 mutually exclusive states**:
+  1. `pending`: Initial state. Operation is still running.
+  2. `fulfilled`: Operation completed successfully with a resolved `value`.
+  3. `rejected`: Operation failed with a `reason` (an Error object).
+* **The Immutability Rule:** Once a Promise transitions to `fulfilled` or `rejected`, it is **settled** and permanently frozen. Calling `resolve()` or `reject()` a second time does nothing.
+
+### 2. Core Real-World Use Cases
+1. **Network I/O:** Calling REST APIs, GraphQL endpoints, Webhooks, or LLM endpoints (`fetch`, Axios).
+2. **Database Operations:** Querying Postgres, MongoDB, or Prisma queries (`await prisma.user.findUnique()`).
+3. **File System & Hardware I/O:** Reading/writing files using `node:fs/promises`.
+4. **Time & Flow Control:** Promisified timeouts (`delay(1000)`), retry loops, and rate limiters.
+
+### 3. Promise Chaining Under the Hood
+* Every `.then()` and `.catch()` call returns a **brand new Promise**.
+* If you return a primitive/object from `.then()`, the next `.then()` receives that value.
+* If you return a **Promise** from inside `.then()`, JavaScript automatically **flattens (unwraps)** it before passing the value to the next `.then()`.
+* **Trap: Forgetting to Return:** Omitting `return` inside a `.then()` passes `undefined` to the next step in the chain.
+
+### 4. `async` / `await` Syntax
+* `async` functions **always return a Promise** (even if you return a plain number or string, V8 wraps it in `Promise.resolve(...)`).
+* `await` pauses the execution of the *surrounding async function* without blocking the main browser/Node thread. It unwraps the fulfilled value or throws the rejection as an error.
+
+### 5. Critical Production Traps & Mechanical Rules
+1. **Synchronous Executor Rule:**
+   The function passed into `new Promise((resolve, reject) => { ... })` runs **IMMEDIATELY and SYNCHRONOUSLY** on the call stack. Only `.then()` callbacks are deferred to the Microtask Queue.
+2. **`async` Synchronous Execution Rule:**
+   An `async` function runs **synchronously** from line 1 until the exact moment it hits an `await` expression. Only lines *after* the `await` are suspended and deferred.
+3. **The `.catch()` Healing Mechanism:**
+   If `.catch()` handles an error without throwing a new error, it returns a **fulfilled Promise**. Subsequent `.then()` blocks downstream will continue executing.
+4. **The Sequential Waterfall Trap:**
+   ```javascript
+   // ❌ SLOW: 2000ms total (waterfall)
+   const user = await getUser(); // 1000ms
+   const posts = await getPosts(); // 1000ms
+   
+   // ✅ FAST: 1000ms total (parallel execution)
+   const [user, posts] = await Promise.all([getUser(), getPosts()]);
+   ```
+5. **The `forEach` + `async` Trap:**
+   `array.forEach(async (item) => { await save(item); });` **does NOT wait**. `forEach` fires all callbacks synchronously and finishes immediately. Use `for...of` for sequential execution or `Promise.all(array.map(...))` for concurrent execution.
+
