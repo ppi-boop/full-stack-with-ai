@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 1 — JavaScript Fundamentals**
-* **Current Progress:** **13 of 16 Topics Completed (81.25%)**
-* **Last Completed Topic:** **Topic 13: Promises, Async/Await & Promise Chaining**
-* **Next Topic to Resume:** ➡️ **Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks**
+* **Current Progress:** **14 of 16 Topics Completed (87.5%)**
+* **Last Completed Topic:** **Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks**
+* **Next Topic to Resume:** ➡️ **Topic 15: Concurrency: `Promise.all`, `allSettled`, `race`, and `any`**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating, deep first-principles explanations, real-world code, and rigorous challenge questions.
 
 ---
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 1, Topic 14 (The Event Loop, Call Stack, Microtasks vs Macrotasks). Maintain the strict teacher persona with zero sugarcoating.
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 1, Topic 15 (Concurrency: Promise.all, allSettled, race, any). Maintain the strict teacher persona with zero sugarcoating.
 ```
 
 ---
@@ -37,7 +37,7 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] Git staging, commits, branches, merges, merge conflicts, `.gitignore`
   - [x] Secret management (`.env`, `.env.example`, `NEXT_PUBLIC_` security)
   - [x] Debugging production bugs, `PATH` variable, `git rm --cached`
-- [ ] **Phase 1: JavaScript Fundamentals** *(In Progress: 13/16)*
+- [ ] **Phase 1: JavaScript Fundamentals** *(In Progress: 14/16)*
   - [x] **Topic 1:** `let`, `const`, `var`, Hoisting & Temporal Dead Zone (TDZ)
   - [x] **Topic 2:** Primitives vs References, Stack vs Heap, `NaN`, `0.1 + 0.2`, `structuredClone`
   - [x] **Topic 3:** Operators, Type Coercion, Truthy/Falsy & `||` vs `??`
@@ -51,8 +51,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] **Topic 11:** Modules: ES Modules (ESM) vs CommonJS (CJS)
   - [x] **Topic 12:** Error Handling: `try/catch/finally` & Custom Error classes
   - [x] **Topic 13:** Promises, Async/Await & Promise Chaining
-  - [ ] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks *(NEXT)*
-  - [ ] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any`
+  - [x] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks
+  - [ ] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any` *(NEXT)*
   - [ ] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks
 - [ ] **Phase 2: HTML & CSS Deep Dive**
 - [ ] **Phase 3: TypeScript Foundations**

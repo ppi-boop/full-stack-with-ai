@@ -573,3 +573,48 @@ throw new ApiError(404, "User not found");
 5. **The `forEach` + `async` Trap:**
    `array.forEach(async (item) => { await save(item); });` **does NOT wait**. `forEach` fires all callbacks synchronously and finishes immediately. Use `for...of` for sequential execution or `Promise.all(array.map(...))` for concurrent execution.
 
+---
+
+# Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks
+
+### 1. The Core Architecture & Mental Model
+* **JavaScript is Single-Threaded:** It has **one Call Stack** and executes one line of code at any single instant.
+* **Non-Blocking Magic:** I/O, timers, and HTTP requests are offloaded to **Web APIs (in Browser)** or **libuv (in Node.js)** C++ threads. When finished, callbacks are placed into queues.
+* **The Airport Runway Mental Model:**
+  * **The Call Stack (Runway):** Only one plane can take off or land at a time.
+  * **Microtask Queue (VIP Emergency Lane):** Cleared completely to `0` whenever the Call Stack empties.
+  * **Macrotask Queue (Standard Taxiway):** Cleared **one task at a time**, after which the controller immediately checks for VIP microtasks again.
+
+### 2. The Two Queues Compared
+| Feature | **Microtask Queue (VIP)** | **Macrotask / Task Queue (Standard)** |
+|---|---|---|
+| **Sources** | `Promise.then/catch/finally`, `await` resumes, `queueMicrotask()`, `process.nextTick` | `setTimeout()`, `setInterval()`, `setImmediate()` (Node), DOM events |
+| **Execution Policy** | **Drained completely** until `0` remain before next step | **Executed ONE by ONE** per event loop cycle |
+| **Priority** | Highest | Normal |
+| **Risk** | Infinite recursion causes **Event Loop Starvation** (freezes UI/Node) | Yields control after every single task |
+
+### 3. The Inviolable 4-Step Event Loop Tick
+```
+[ Step 1: Run Call Stack ] 
+       │ (Call stack reaches 0)
+       ▼
+[ Step 2: DRAIN ALL Microtasks ] ◄── Loop here until 0 microtasks left!
+       │ (Microtask queue is empty)
+       ▼
+[ Step 3: Render Phase ] ────────── (Browser only: Layout, Paint if needed)
+       │
+       ▼
+[ Step 4: Run EXACTLY 1 Macrotask ]
+       │
+       └───► Jump back to Step 2 immediately!
+```
+
+### 4. Critical Interview Traps
+1. **The Interleaving Trap (Why `C` runs before `D`):**
+   If a Macrotask schedules a new Microtask, that new Microtask **runs immediately after the current Macrotask finishes**, jumping ahead of any other Macrotasks already waiting in line!
+2. **The Microtask Starvation Attack:**
+   ```javascript
+   function starve() { queueMicrotask(starve); }
+   starve(); // Locks CPU at 100%, timers/clicks NEVER execute!
+   ```
+
