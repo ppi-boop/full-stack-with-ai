@@ -77,5 +77,9 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 
 
 Instead of searching through many small files, your master study notes are organized by technology / phase:
 
-* 📄 **[notes/phase_00_dev_foundations.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_00_dev_foundations.md)**: Web architecture, HTTP, REST, CORS, Terminal, Git, Secrets.
-* 📄 **[notes/phase_01_javascript.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_01_javascript.md)**: Master JavaScript Handbook (Topics 1 to 10 completed, continuously updated).
+* 📄 **Phase 0 (Developer Foundations):**
+  * Markdown: [notes/phase_00_dev_foundations.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_00_dev_foundations.md)
+  * Printable PDF: [Phase_00_Developer_Foundations.pdf](file:///Users/tagline/Documents/fullstack-ai-roadmap/Phase_00_Developer_Foundations.pdf)
+* 📄 **Phase 1 (JavaScript Fundamentals — 16 Topics Complete):**
+  * Markdown: [notes/phase_01_javascript.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_01_javascript.md)
+  * Printable PDF: [Phase_01_JavaScript_Master_Handbook.pdf](file:///Users/tagline/Documents/fullstack-ai-roadmap/Phase_01_JavaScript_Master_Handbook.pdf)
