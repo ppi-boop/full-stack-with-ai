@@ -21,6 +21,7 @@
 * [Topic 13: Promises, Async/Await & Promise Chaining](#topic-13-promises-asyncawait--promise-chaining)
 * [Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks](#topic-14-the-event-loop-call-stack-microtasks-vs-macrotasks)
 * [Topic 15: Concurrency — Promise.all, allSettled, race, any](#topic-15-concurrency--promiseall-allsettled-race-any)
+* [Topic 16: Fetch API, AbortController, Timeouts & Memory Leaks](#topic-16-fetch-api-abortcontroller-timeouts--memory-leaks)
 
 ---
 
@@ -674,3 +675,65 @@ throw new ApiError(404, "User not found");
   * `Promise.any([])` $\rightarrow$ Rejects immediately with `AggregateError`.
   * `Promise.race([])` $\rightarrow$ **STAYS PENDING FOREVER!** (Never resolves or rejects; leaks memory).
 * **Non-Promise Values:** Automatically wrapped in `Promise.resolve(val)`.
+
+---
+
+# Topic 16: Fetch API, `AbortController`, Timeouts & Memory Leaks
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **`fetch()`:** The courier between your browser and server.
+  * **The Fatal Trap:** The courier **never fails** on `404 Not Found` or `500 Server Error`. As long as the courier reaches the server and brings back a status message, the promise **resolves**!
+  * **When does `fetch()` reject?** ONLY on physical network failures (Wi-Fi dropped, offline, invalid domain, DNS lookup failed).
+  * **Rule:** Always check `if (!response.ok)` (`status` between 200–299).
+* **`AbortController`:** The "Cancel" button for in-flight requests.
+  * Stops wasting network bandwidth and prevents race conditions and memory leaks.
+* **The Juice Box Stream Analogy:**
+  * HTTP response bodies are **one-way data streams**.
+  * Calling `await response.json()` or `await response.text()` drains the carton completely.
+  * Calling `response.json()` a second time throws `TypeError: Failed to execute 'json' on 'Response': body stream already read`. (Use `response.clone()` if you truly need multiple reads).
+
+### 2. Under the Hood Mechanics & Code
+
+#### A. Checking `response.ok` Properly
+```javascript
+const response = await fetch('/api/user/10');
+if (!response.ok) {
+  throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+}
+const data = await response.json();
+```
+
+#### B. `AbortController` Pattern
+```javascript
+const controller = new AbortController();
+
+fetch('/api/heavy-data', { signal: controller.signal })
+  .then(res => res.json())
+  .catch(err => {
+    if (err.name === 'AbortError') {
+      console.log('Request aborted cleanly!');
+    } else {
+      console.error('Real network failure:', err);
+    }
+  });
+
+// Cancel the request at any time:
+controller.abort();
+```
+
+#### C. Modern Native Timeout with `AbortSignal.timeout(ms)`
+```javascript
+try {
+  // Automatically cancels after 4000ms:
+  const res = await fetch('/api/data', { signal: AbortSignal.timeout(4000) });
+  const data = await res.json();
+} catch (err) {
+  if (err.name === 'TimeoutError') {
+    console.error('Request timed out!');
+  }
+}
+```
+
+### 3. Production Bugs Prevented
+1. **Typeahead / Search Bar Race Conditions:** Typing "cat", then "catering". Aborting the previous request ensures slow stale responses never overwrite newer search results.
+2. **React Memory Leaks / Zombie Callbacks:** Aborting in the `useEffect` cleanup prevents setting state on unmounted components.
