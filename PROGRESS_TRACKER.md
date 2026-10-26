@@ -6,10 +6,10 @@
 
 ## 📍 Current Status
 
-* **Current Active Phase:** **Phase 2 — HTML & CSS Deep Dive**
-* **Current Progress:** **Phase 1 Complete (100%) — Starting Phase 2**
+* **Current Active Phase:** **Phase 2 — TypeScript**
+* **Current Progress:** **Phase 1 Complete (100%) — Starting Phase 2 (TypeScript)**
 * **Last Completed Topic:** **Phase 1, Topic 16: Fetch API, `AbortController`, Timeouts & Memory Leaks**
-* **Next Topic to Resume:** ➡️ **Phase 2, Topic 1: Modern Semantic HTML, The Box Model & CSS Specificity / Cascade**
+* **Next Topic to Resume:** ➡️ **Phase 2, Topic 1: TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Type Inference)**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 1 is complete! Our next topic is Phase 2, Topic 1 (Modern Semantic HTML, Box Model & CSS Specificity). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 1 is complete! Our next topic is Phase 2, Topic 1 (TypeScript: Compile-Time vs Runtime, Structural Typing & Type Inference). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
 ```
 
 ---
@@ -54,9 +54,9 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 
   - [x] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks
   - [x] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any`
   - [x] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks
-- [ ] **Phase 2: HTML & CSS Deep Dive** *(NEXT)*
-- [ ] **Phase 3: TypeScript Foundations**
-- [ ] **Phase 4: React Core & Reconciliation**
+- [ ] **Phase 2: TypeScript** *(NEXT — Week 3 in Roadmap)*
+- [ ] **Phase 3: HTML, CSS, Browser & Web Fundamentals** *(Week 4 in Roadmap)*
+- [ ] **Phase 4: React Core & Reconciliation** *(Weeks 5 & 6 in Roadmap)*
 
 ### Tier 2: Beginner to Solid (Next.js & Backend)
 - [ ] **Phase 5: Next.js App Router & Vercel AI SDK** *(Project 1: Admin Dashboard)*
