@@ -16,6 +16,11 @@
 * [Topic 8: Functional Array Methods (map, filter, reduce, find, some, every)](#topic-8-functional-array-methods)
 * [Topic 9: Closures, Higher-Order Functions & React Stale Closures](#topic-9-closures-higher-order-functions--react-stale-closures)
 * [Topic 10: The this Keyword, Explicit Binding (call, apply, bind) & Prototypes](#topic-10-the-this-keyword-explicit-binding--prototypes)
+* [Topic 11: Modules — ES Modules (ESM) vs CommonJS (CJS)](#topic-11-modules--es-modules-esm-vs-commonjs-cjs)
+* [Topic 12: Error Handling — try, catch, finally & Custom Errors](#topic-12-error-handling--try-catch-finally--custom-errors)
+* [Topic 13: Promises, Async/Await & Promise Chaining](#topic-13-promises-asyncawait--promise-chaining)
+* [Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks](#topic-14-the-event-loop-call-stack-microtasks-vs-macrotasks)
+* [Topic 15: Concurrency — Promise.all, allSettled, race, any](#topic-15-concurrency--promiseall-allsettled-race-any)
 
 ---
 
@@ -618,3 +623,54 @@ throw new ApiError(404, "User not found");
    starve(); // Locks CPU at 100%, timers/clicks NEVER execute!
    ```
 
+---
+
+# Topic 15: Concurrency — `Promise.all`, `allSettled`, `race`, `any`
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **Waterfall (Sequential):** Waiting for one async task to finish before starting the next (slow).
+* **Concurrent:** Firing multiple async tasks at the exact same instant (fast).
+
+| Method | Plain English Analogy | The Golden Rule |
+|---|---|---|
+| **`Promise.all`** | **The Bank Heist Crew:** All members must succeed. If one gets caught, the whole heist is blown immediately. | **"All or Nothing"** (Fail-fast). |
+| **`Promise.allSettled`** | **The School Exam:** Teacher waits for every student's paper, whether they passed or failed. | **"Wait for everybody, no matter what"** (Never throws). |
+| **`Promise.race`** | **Formula 1 Race:** First car across the finish line wins, whether it wins cleanly or crashes across. | **"First to settle wins"** (Success or Failure). |
+| **`Promise.any`** | **Hailing a Taxi:** You ask 3 cab apps simultaneously. First driver to accept wins. You only cry if all 3 apps reject. | **"First SUCCESS wins"** (Ignores errors unless all fail). |
+
+### 2. Deep Mechanics & Code Patterns
+
+#### A. `Promise.all([p1, p2, p3])`
+* Resolves to an array of results with **preserved input order**.
+* **Fail-fast:** Rejects immediately upon the first rejection.
+* **The "Zombie" Trap:** Unsettled promises in the array **continue running** in the background! They are not cancelled unless linked to an `AbortController`.
+
+#### B. `Promise.allSettled([p1, p2, p3])`
+* Waits for all promises to finish (either fulfilled or rejected).
+* Returns an array of status objects:
+  * `{ status: "fulfilled", value: data }`
+  * `{ status: "rejected", reason: error }`
+* Use case: Multi-widget dashboards, bulk email / push notification processing.
+
+#### C. `Promise.race([p1, p2, p3])`
+* Settles as soon as the **first** promise settles (fulfills OR rejects).
+* Essential Production Pattern: **Request Timeout**.
+  ```javascript
+  const data = await Promise.race([
+    fetch('/api/data'),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+  ]);
+  ```
+
+#### D. `Promise.any([p1, p2, p3])`
+* Settles as soon as the **first promise fulfills** (ignores failures).
+* If all reject, throws an **`AggregateError`** containing `error.errors` (array of all failure reasons).
+* Use case: Redundant CDNs, multi-region fallback endpoints.
+
+### 3. Edge Cases & Interview Traps
+* **Empty Arrays `[]`:**
+  * `Promise.all([])` $\rightarrow$ Resolves immediately to `[]`.
+  * `Promise.allSettled([])` $\rightarrow$ Resolves immediately to `[]`.
+  * `Promise.any([])` $\rightarrow$ Rejects immediately with `AggregateError`.
+  * `Promise.race([])` $\rightarrow$ **STAYS PENDING FOREVER!** (Never resolves or rejects; leaks memory).
+* **Non-Promise Values:** Automatically wrapped in `Promise.resolve(val)`.

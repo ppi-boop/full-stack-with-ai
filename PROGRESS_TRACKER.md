@@ -7,10 +7,10 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 1 — JavaScript Fundamentals**
-* **Current Progress:** **14 of 16 Topics Completed (87.5%)**
-* **Last Completed Topic:** **Topic 14: The Event Loop, Call Stack, Microtasks vs Macrotasks**
-* **Next Topic to Resume:** ➡️ **Topic 15: Concurrency: `Promise.all`, `allSettled`, `race`, and `any`**
-* **Teaching Persona Active:** Strict Teacher, zero sugarcoating, deep first-principles explanations, real-world code, and rigorous challenge questions.
+* **Current Progress:** **15 of 16 Topics Completed (93.75%)**
+* **Last Completed Topic:** **Topic 15: Concurrency: `Promise.all`, `allSettled`, `race`, and `any`**
+* **Next Topic to Resume:** ➡️ **Topic 16: Fetch API, `AbortController`, Timeouts & Memory Leaks (Final Topic of Phase 1!)**
+* **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
 
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 1, Topic 15 (Concurrency: Promise.all, allSettled, race, any). Maintain the strict teacher persona with zero sugarcoating.
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 1, Topic 16 (Fetch API, AbortController, Timeouts & Memory Leaks). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
 ```
 
 ---
@@ -52,8 +52,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] **Topic 12:** Error Handling: `try/catch/finally` & Custom Error classes
   - [x] **Topic 13:** Promises, Async/Await & Promise Chaining
   - [x] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks
-  - [ ] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any` *(NEXT)*
-  - [ ] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks
+  - [x] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any`
+  - [ ] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks *(NEXT — Final Topic of Phase 1!)*
 - [ ] **Phase 2: HTML & CSS Deep Dive**
 - [ ] **Phase 3: TypeScript Foundations**
 - [ ] **Phase 4: React Core & Reconciliation**
