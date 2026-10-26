@@ -7,6 +7,7 @@
 
 ## Quick Navigation
 * [Topic 1: TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Inference)](#topic-1-typescript-mental-model)
+* [Topic 2: Primitive, Array, Tuple, Object & Function Types](#topic-2-primitive-array-tuple-object--function-types)
 
 ---
 
@@ -61,3 +62,51 @@ If the backend returns `{ id: "10", name: null }`, TypeScript will not catch it 
 * **Local Variables:** Let TypeScript infer types automatically (`let x = 5` is `number`; `const x = 5` is literal type `10`).
 * **Boundaries:** Explicitly annotate function parameters, exported function return types, and public interfaces.
 * **`as const`:** Locks an object or array to `readonly` and infers literal types rather than primitive widenings (`string`, `number`).
+
+---
+
+# Topic 2: Primitive, Array, Tuple, Object & Function Types
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **Primitives:** Basic building blocks (`number`, `string`, `boolean`, `bigint`, `symbol`).
+* **Array (`string[]`):** The Shopping List. Variable length, can add/remove elements anytime.
+* **Tuple (`[string, number]`):** The Passport ID. Fixed length, fixed order per slot (e.g., React's `useState` returns `[state, setter]`).
+* **`void` vs `undefined` as return types:**
+  * `undefined`: Function **must explicitly return the literal value `undefined`**.
+  * `void`: Tells caller **"ignore whatever value is returned"**. Allows callbacks to return values that callers discard (e.g. `forEach(num => set.add(num))`).
+* **The `{}` & `Object` Anti-Pattern:** `{}` does NOT mean a plain object; it means **any non-nullish value** (strings and numbers pass `{}`!). Use `Record<string, unknown>` or explicit shapes instead.
+
+### 2. Under the Hood Mechanics & Code
+
+#### A. Array vs Tuple Inference Trap
+```typescript
+let a = ["Alpha", 1]; // Inferred as (string | number)[] — standard array!
+a.push("Beta");       // ✅ Allowed
+a.push(2);            // ✅ Allowed
+// a.push(true);      // ❌ Error: boolean not assignable to string | number
+
+// Explicit tuple annotation needed for fixed length/slots:
+let t: [string, number] = ["Alpha", 1];
+```
+
+#### B. Tuple Mutation Trap (`.push` bypass)
+```typescript
+const point: [number, number] = [10, 20];
+point.push(30); // 💥 Compiles! Array.prototype methods bypass tuple length checks.
+
+// Senior Fix (Readonly Tuple):
+const safePoint: readonly [number, number] = [10, 20];
+// safePoint.push(30); // ❌ Compile Error: push does not exist on readonly tuple
+```
+
+#### C. Optional Properties & Strict Null Checks
+```typescript
+type Config = {
+  readonly port: number;
+  tags?: string[]; // Type is string[] | undefined
+};
+
+const server: Config = { port: 8080, tags: ["web"] };
+// server.tags.push("api"); // ❌ Compile Error with strictNullChecks: Object is possibly 'undefined'!
+server.tags?.push("api");   // ✅ Safe: Optional chaining handles undefined cleanly
+```
