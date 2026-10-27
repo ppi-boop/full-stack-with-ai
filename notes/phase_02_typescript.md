@@ -9,6 +9,7 @@
 * [Topic 1: TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Inference)](#topic-1-typescript-mental-model)
 * [Topic 2: Primitive, Array, Tuple, Object & Function Types](#topic-2-primitive-array-tuple-object--function-types)
 * [Topic 3: Interfaces vs Type Aliases; Optional (?) and readonly](#topic-3-interfaces-vs-type-aliases-optional--and-readonly)
+* [Topic 4: Union, Intersection, Literal Types & Discriminated Unions](#topic-4-union-intersection-literal-types--discriminated-unions)
 
 ---
 
@@ -158,3 +159,46 @@ admin.config.theme = "dark"; // ✅ Allowed! (readonly was on 'config' pointer, 
 
 #### D. When `interface extends` Fails
 An `interface` can only extend an **object type or statically-known object shape**. It **CANNOT** extend a union (`type ID = string | number`) or primitive because interfaces must describe objects.
+
+---
+
+# Topic 4: Union, Intersection, Literal Types & Discriminated Unions
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **Literal Types:** Exact specific values instead of general categories (e.g. `"paid"`, `404`, `true`).
+* **Union (`|` = OR):** The Restaurant Menu Choice. Value can be one of several options (`"light" | "dark"`).
+* **Intersection (`&` = AND):** The Combo Meal. Combines all properties into one required shape (`Person & Employee`).
+  * **The Conflict Trap:** If `A` has `y: string` and `B` has `y: number`, `A & B` produces `y: never` because no value can simultaneously be a string and a number. You can never instantiate this object!
+* **Discriminated Unions (The Tagged State):** Mutually exclusive objects sharing a common literal property (the tag / discriminant, e.g. `status` or `type`).
+* **The "Impossible State" Anti-Pattern:** Modeling UI state as `{ isLoading: boolean; isError: boolean; data?: T }` allows invalid states (loading + error + data simultaneously). Discriminated unions prevent this permanently.
+
+### 2. Under the Hood Mechanics & Code
+
+#### A. Modeling UI & API States Cleanly
+```typescript
+type RequestState<T> =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "error"; message: string }
+  | { status: "success"; data: T };
+
+function render(s: RequestState<string[]>) {
+  switch (s.status) {
+    case "idle":
+    case "loading":
+      return "Loading...";
+    case "error":
+      return `Error: ${s.message}`; // ✅ s is narrowed: message is guaranteed to exist
+    case "success":
+      return s.data.join(", ");     // ✅ s is narrowed: data is guaranteed to exist
+    default: {
+      // 🛡️ Exhaustive check: compile error if a case is added to RequestState but not handled here
+      const _exhaustive: never = s;
+      return _exhaustive;
+    }
+  }
+}
+```
+
+#### B. The Exhaustive `never` Check
+When all possible union variants are handled in `if/else` or `switch`, the remaining type in `default` narrows down to `never`. If a developer adds a new variant to the union later, TypeScript immediately flags the `never` assignment, catching unhandled cases at compile time!
