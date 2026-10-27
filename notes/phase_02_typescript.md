@@ -8,6 +8,7 @@
 ## Quick Navigation
 * [Topic 1: TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Inference)](#topic-1-typescript-mental-model)
 * [Topic 2: Primitive, Array, Tuple, Object & Function Types](#topic-2-primitive-array-tuple-object--function-types)
+* [Topic 3: Interfaces vs Type Aliases; Optional (?) and readonly](#topic-3-interfaces-vs-type-aliases-optional--and-readonly)
 
 ---
 
@@ -110,3 +111,50 @@ const server: Config = { port: 8080, tags: ["web"] };
 // server.tags.push("api"); // ❌ Compile Error with strictNullChecks: Object is possibly 'undefined'!
 server.tags?.push("api");   // ✅ Safe: Optional chaining handles undefined cleanly
 ```
+
+---
+
+# Topic 3: Interfaces vs Type Aliases; Optional (`?`) and `readonly`
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **`type` (The Swiss Army Knife):** Can describe *anything* — unions (`"light" | "dark"`), tuples, primitives (`type ID = string`), objects, and functions. Once defined, it is closed and cannot be reopened.
+* **`interface` (The Expandable Lego Brick):** Strictly for **object contracts and classes**. Can extend other interfaces cleanly (`extends`), and can be declared multiple times to automatically combine fields (**Declaration Merging**).
+* **`readonly`:** Compile-time flag preventing reassignment (`user.id = 2`). Disappears at runtime (not a runtime lock like `Object.freeze`).
+* **The "Everything Optional `?`" Trap:** Marking properties with `?` to silence TypeScript errors turns your code into an unsafe guessing game where `{}` is considered valid. Only use `?` for truly optional/nullable fields.
+
+### 2. Under the Hood Mechanics & Code
+
+#### A. Extending Objects: `extends` vs Intersection (`&`)
+```typescript
+// Interface extension (Recommended for object contracts)
+interface BaseEntity { readonly id: number; createdAt: string; }
+interface Order extends BaseEntity { totalAmount: number; }
+
+// Type alias intersection
+type BaseEntity = { readonly id: number; createdAt: string; };
+type Order = BaseEntity & { totalAmount: number; };
+```
+
+#### B. Declaration Merging (Interface-Only Superpower)
+```typescript
+interface Cart { items: string[]; }
+interface Cart { total: number; }
+
+// TypeScript automatically merges both declarations:
+const c: Cart = { items: ["Book"], total: 20 }; // Must have BOTH fields!
+```
+*Crucial in production for augmenting third-party library types, `window`, or `process.env` in `.d.ts` files.*
+
+#### C. `readonly` is Shallow (The Nested Mutation Trap)
+```typescript
+type Admin = {
+  readonly config: { theme: string };
+};
+
+const admin: Admin = { config: { theme: "light" } };
+admin.config.theme = "dark"; // ✅ Allowed! (readonly was on 'config' pointer, not 'theme')
+// admin.config = { theme: "dark" }; // ❌ Error: Cannot assign to 'config'
+```
+
+#### D. When `interface extends` Fails
+An `interface` can only extend an **object type or statically-known object shape**. It **CANNOT** extend a union (`type ID = string | number`) or primitive because interfaces must describe objects.

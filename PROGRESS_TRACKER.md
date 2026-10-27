@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 2 — TypeScript**
-* **Current Progress:** **2 of 12 Topics Completed (16.7%)**
-* **Last Completed Topic:** **Phase 2, Topic 2: Primitive, Array, Tuple, Object & Function Types**
-* **Next Topic to Resume:** ➡️ **Phase 2, Topic 3: Interfaces vs Type Aliases; Optional (`?`) and `readonly`**
+* **Current Progress:** **3 of 12 Topics Completed (25.0%)**
+* **Last Completed Topic:** **Phase 2, Topic 3: Interfaces vs Type Aliases; Optional (`?`) and `readonly`**
+* **Next Topic to Resume:** ➡️ **Phase 2, Topic 4: Union, Intersection, Literal Types & Discriminated Unions**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 2, Topic 3 (Interfaces vs Type Aliases; Optional and readonly). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 2, Topic 4 (Union, Intersection, Literal Types & Discriminated Unions). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
 ```
 
 ---
@@ -54,11 +54,11 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks
   - [x] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any`
   - [x] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks
-- [ ] **Phase 2: TypeScript** *(In Progress: 1/12 — Week 3 in Roadmap)*
+- [ ] **Phase 2: TypeScript** *(In Progress: 3/12 — Week 3 in Roadmap)*
   - [x] **Topic 1:** TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Type Inference)
   - [x] **Topic 2:** Primitive, Array, Tuple, Object & Function Types
-  - [ ] **Topic 3:** Interfaces vs Type Aliases; Optional (`?`) and `readonly` *(NEXT)*
-  - [ ] **Topic 4:** Union, Intersection, Literal Types & Discriminated Unions
+  - [x] **Topic 3:** Interfaces vs Type Aliases; Optional (`?`) and `readonly`
+  - [ ] **Topic 4:** Union, Intersection, Literal Types & Discriminated Unions *(NEXT)*
   - [ ] **Topic 5:** Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`)
   - [ ] **Topic 6:** Generics (Type parameters `<T>`, constraints `K extends keyof T`)
   - [ ] **Topic 7:** Utility Types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`, etc.)
