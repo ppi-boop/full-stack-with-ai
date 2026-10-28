@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 2 — TypeScript**
-* **Current Progress:** **4 of 12 Topics Completed (33.3%)**
-* **Last Completed Topic:** **Phase 2, Topic 4: Union, Intersection, Literal Types & Discriminated Unions**
-* **Next Topic to Resume:** ➡️ **Phase 2, Topic 5: Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`)**
+* **Current Progress:** **8 of 12 Topics Completed (66.7%)**
+* **Last Completed Topic:** **Phase 2, Topic 8: Enums vs Object Literals (`as const`)**
+* **Next Topic to Resume:** ➡️ **Phase 2, Topic 9: `unknown`, `any`, `never`, `void` & Null Safety (`strictNullChecks`)**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
@@ -59,10 +59,10 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] **Topic 2:** Primitive, Array, Tuple, Object & Function Types
   - [x] **Topic 3:** Interfaces vs Type Aliases; Optional (`?`) and `readonly`
   - [x] **Topic 4:** Union, Intersection, Literal Types & Discriminated Unions
-  - [ ] **Topic 5:** Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`) *(NEXT)*
-  - [ ] **Topic 6:** Generics (Type parameters `<T>`, constraints `K extends keyof T`)
-  - [ ] **Topic 7:** Utility Types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`, etc.)
-  - [ ] **Topic 8:** Enums vs Object Literals (`as const`)
+  - [x] **Topic 5:** Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`) (COMPLETED)
+  - [x] **Topic 6:** Generics (Type parameters `<T>`, constraints `K extends keyof T`) (COMPLETED)
+  - [x] **Topic 7:** Utility Types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`, etc.) (COMPLETED)
+  - [x] **Topic 8:** Enums vs Object Literals (`as const`) (COMPLETED)
   - [ ] **Topic 9:** `unknown`, `any`, `never`, `void` & Null Safety (`strictNullChecks`)
   - [ ] **Topic 10:** Typing API Responses & The Trust Boundary
   - [ ] **Topic 11:** Typing React (Props, State, Events, Hooks)

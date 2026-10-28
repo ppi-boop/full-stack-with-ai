@@ -202,3 +202,230 @@ function render(s: RequestState<string[]>) {
 
 #### B. The Exhaustive `never` Check
 When all possible union variants are handled in `if/else` or `switch`, the remaining type in `default` narrows down to `never`. If a developer adds a new variant to the union later, TypeScript immediately flags the `never` assignment, catching unhandled cases at compile time!
+
+## Topic 5: Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`)
+
+### Challenge Answers Review
+
+1. **Snippet 1 – Runtime Crash**
+   ```typescript
+   const obj: null = null;
+   console.log(obj.length); // ❌ Crash: Cannot read property 'length' of null
+   ```
+   *Why it crashes*: At runtime `null` is an object (`typeof null === "object"`). The compiler cannot prevent accessing a property that does not exist because the type was erased. Hence the code compiles but throws a `TypeError` when executed.
+
+2. **Snippet 2 – Why `isAirplane(v): v is Airplane` is needed**
+   ```typescript
+   interface Vehicle { wheels: number; }
+   interface Airplane extends Vehicle { wings: number; }
+   function isAirplane(v: Vehicle): v is Airplane { return "wings" in v; }
+   ```
+   A plain `boolean` return type gives no information to TypeScript’s control‑flow analysis, so inside an `if (isAirplane(v)) {}` block `v` would remain typed as `Vehicle`. The **type predicate** `v is Airplane` tells the compiler that a true result narrows the variable’s type to `Airplane`, unlocking access to `wings` without errors.
+
+3. **Snippet 3 – Inferred `string[]` after filtering**
+   ```typescript
+   const mixed: (string | null | undefined)[] = ["a", null, "b", undefined];
+   const filtered = mixed.filter((v): v is string => typeof v === "string");
+   // filtered is inferred as string[]
+   ```
+   The custom predicate `v is string` narrows each element that passes the `typeof v === "string"` check. `Array.filter` is typed to return an array of the narrowed type, so `filtered` becomes `string[]`.
+
+### Further Reading
+- *Type Guards* – official docs on `typeof`, `instanceof`, `in`, and custom predicates.
+- *Control Flow Analysis* – how the compiler propagates narrowed types across branches.
+
+---
+
+# Topic 6: Generics — Type Parameters `<T>` & Constraints `K extends keyof T`
+
+### 1. Simple Definitions & Mental Models (Easy Language)
+* **Generic `<T>`:** A blank label on a box. The actual type is stamped on it when the function is called — inferred automatically or set explicitly.
+* **Why not `any`?** `any` loses all type information. Generics preserve the exact type through the whole call.
+* **`T extends SomeType`:** A constraint. "T is allowed only if it satisfies this shape."
+* **`keyof T`:** Produces a union of all key names of type T at compile time. Zero runtime cost.
+* **`T[K]`** (Indexed Access): "The type of the value at key K in object T."
+
+### 2. Under the Hood Mechanics
+
+#### A. Generic Preserves the Full Shape
+```typescript
+function wrap<T>(val: T): { value: T } { return { value: val }; }
+
+const a = wrap(100);          // { value: number }  — NOT just number
+const b = wrap("TypeScript"); // { value: string }
+const c = wrap([true, false]);// { value: boolean[] }
+```
+
+#### B. Constraints: `T extends { length: number }`
+```typescript
+// ❌ Error: T could be anything — no guarantee of .length
+function getLength<T>(val: T): number { return val.length; }
+
+// ✅ Constrain T to types that have length
+function getLength<T extends { length: number }>(val: T): number {
+  return val.length;
+}
+getLength("Hello");  // ✅
+getLength(42);       // ❌ Compile Error: number has no 'length'
+```
+
+#### C. `keyof` + Indexed Access `T[K]` — Safe Property Accessor
+```typescript
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+const user = { id: 1, name: "Alice" };
+const id   = getProperty(user, "id");    // number ✅
+const name = getProperty(user, "name");  // string ✅
+const x    = getProperty(user, "phone"); // ❌ Compile Error
+```
+
+#### D. The Constraint Trap — Missing `extends object`
+```typescript
+// ❌ Dangerous: T unconstrained — firstKey(42) compiles but returns undefined at runtime!
+function firstKey<T>(obj: T): keyof T {
+  return Object.keys(obj as object)[0] as keyof T;
+}
+firstKey(42); // compiles ❌ silent runtime bug
+
+// ✅ Fix: add extends object — now firstKey(42) is a compile error
+function firstKey<T extends object>(obj: T): keyof T {
+  return Object.keys(obj)[0] as keyof T;
+}
+```
+
+#### E. `Pick<T, K>` Preview — Generic + keyof in action
+```typescript
+function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+  const result = {} as Pick<T, K>;
+  for (const k of keys) result[k] = obj[k];
+  return result;
+}
+
+const product = { id: 1, name: "Laptop", price: 999 };
+const summary = pick(product, ["id", "name"]);
+// Return type:  { id: number; name: string }
+// Runtime value: { id: 1, name: "Laptop" }
+// "price" is gone — Pick removes it from the type too
+```
+
+---
+
+
+---
+
+
+# Topic 7: Utility Types
+
+### 1. Simple Definitions (Easy Language)
+Utility types are **built-in generic helpers** that transform existing types into new ones. Compile-time only — zero runtime cost.
+
+| Utility Type | What it does |
+|---|---|
+| `Partial<T>` | Makes every property optional |
+| `Required<T>` | Makes every property required |
+| `Readonly<T>` | Makes every property readonly |
+| `Pick<T, K>` | Keeps ONLY keys K from T |
+| `Omit<T, K>` | Removes keys K from T |
+| `Record<K, V>` | Object with keys K and values V |
+| `ReturnType<F>` | Extracts the return type of a function |
+| `Awaited<T>` | Unwraps Promise<T> to get T |
+| `NonNullable<T>` | Removes null and undefined |
+
+### 2. Under the Hood Mechanics
+
+#### A. Partial + Omit — trace step by step
+```typescript
+interface Article { id: number; title: string; body: string; publishedAt: Date; authorId: number; }
+
+// Step 1 — Omit removes id and publishedAt:
+type EditableFields = Omit<Article, "id" | "publishedAt">;
+// = { title: string; body: string; authorId: number }
+
+// Step 2 — Partial makes everything optional:
+type UpdatePayload = Partial<EditableFields>;
+// = { title?: string; body?: string; authorId?: number }
+// NOT just "object" — you must trace the full transformation!
+```
+
+#### B. Record — expands a union into required keys
+```typescript
+type Env = "development" | "staging" | "production";
+type Config = Record<Env, { apiUrl: string; debug: boolean }>;
+// = { development: { apiUrl: string; debug: boolean };
+//     staging:     { apiUrl: string; debug: boolean };
+//     production:  { apiUrl: string; debug: boolean }; }
+
+const config: Config = { development: {...}, staging: {...}, production: {...} };
+const url = config["production"].apiUrl; // string ✅
+// All 3 keys are required — missing one is a compile error
+```
+
+#### C. ReturnType + Awaited — never confuse param vs return type
+```typescript
+async function getScore(userId: string): Promise<number> { return 42; }
+//                       ↑ param: string   ↑ return: Promise<number>
+
+type Score = Awaited<ReturnType<typeof getScore>>;
+// ReturnType → Promise<number>
+// Awaited    → number   ← unwraps the Promise
+const result: Score = 42; // type: number, value: 42
+
+// ❌ Common mistake: reading the PARAMETER type (string) instead of the RETURN type (number)
+```
+
+---
+
+# Topic 8: Enums vs Object Literals (`as const`)
+
+### 1. Simple Definitions (Easy Language)
+* **`enum`:** A TypeScript-only construct for named constants. Compiles to **real JavaScript runtime code** — ships to the browser even though it's just constants.
+* **`as const`:** Locks a value to its exact literal types. Everything becomes `readonly`. Compiles to **zero runtime code** beyond the plain JS object.
+* **The Big Rule:** Prefer `as const` objects over `enum` in modern TypeScript. Enums are considered legacy by most style guides.
+
+### 2. Under the Hood Mechanics
+
+#### A. What enum compiles to (real runtime code!)
+```typescript
+enum Status { Active = "ACTIVE", Inactive = "INACTIVE" }
+// Compiles to actual JS:
+// var Status; (function(Status) { Status["Active"] = "ACTIVE"; ... })(Status || (Status={}));
+// This code is SHIPPED to the browser. Not free.
+```
+
+#### B. as const — zero runtime overhead
+```typescript
+const Status = { Active: "ACTIVE", Banned: "BANNED", Pending: "PENDING" } as const;
+// Type: { readonly Active: "ACTIVE"; readonly Banned: "BANNED"; readonly Pending: "PENDING" }
+// (literal types, not widened to string)
+
+// Extract the value union:
+type StatusValue = typeof Status[keyof typeof Status];
+// = "ACTIVE" | "BANNED" | "PENDING"
+
+updateUser(Status.Active); // ✅ "ACTIVE" is in the union
+updateUser("active");      // ❌ "active" (lowercase) is NOT in the union — case matters!
+```
+
+#### C. as const prevents widening — literals stay literals
+```typescript
+const config = { retries: 3, baseUrl: "https://api.example.com" } as const;
+// WITHOUT as const → retries: number  (widened)
+// WITH    as const → retries: 3       (exact literal type — only 3 is valid!)
+
+const r = config.retries; // type: 3  ← NOT number
+```
+
+#### D. Enums are nominally typed — the incompatibility trap
+```typescript
+enum Color { Red = "RED" }
+enum Shade { Red = "RED" }  // same value, different enum
+
+function paint(c: Color) {}
+paint(Shade.Red); // ❌ Error — different enum types are INCOMPATIBLE even with same value
+paint("RED");     // ❌ Error — even the raw string is rejected by enum typing
+
+// as const avoids this entirely — values are just strings, structurally compatible
+```
+
+---
