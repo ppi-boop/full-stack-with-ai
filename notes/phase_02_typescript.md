@@ -429,3 +429,154 @@ paint("RED");     // ❌ Error — even the raw string is rejected by enum typin
 ```
 
 ---
+
+# Topic 9: unknown, any, never, void and Null Safety
+
+### Key Rules
+- any = TypeScript off-switch. Viral. Avoid in production.
+- unknown = Safe stranger. Must narrow before use. Use for catch(err), JSON.parse, API responses.
+- never = Impossible value. Functions that throw, infinite loops, exhaustive checks, impossible intersections.
+- void = Caller ignores the return. Used for callbacks. Different from undefined.
+- strictNullChecks = null and undefined are their own types. Forces explicit string | null.
+
+### Critical Code
+
+```typescript
+// any — compiles but crashes at runtime
+function parse(data: any) { return data.user.name; }
+
+// unknown — forces narrowing
+function parse(data: unknown): string {
+  if (typeof data === "object" && data !== null && "user" in data) {
+    return (data as { user: { name: string } }).user.name;
+  }
+  throw new Error("Invalid");
+}
+
+// never — exhaustive check
+type Shape = "circle" | "square";
+function area(s: Shape) {
+  if (s === "circle") return 3.14;
+  if (s === "square") return 1;
+  const check: never = s; // compile error if Shape grows and you forget a case
+}
+
+// catch block typed as unknown in TS 4+
+try {} catch (err) {
+  if (err instanceof Error) console.log(err.message); // must narrow first
+}
+
+// strictNullChecks
+let x: string = null;         // Error
+let y: string | null = null;  // OK
+let z: string = y;            // Error: y could be null
+let w: string = y!;           // OK: non-null assertion (you promise it is not null)
+```
+
+---
+
+# Topic 10: Typing API Responses and The Trust Boundary
+
+### Key Rules
+- TypeScript cannot validate runtime data. as User is a lie — runtime does not care.
+- Trust Boundary = any data from network, localStorage, or user input is unknown until validated.
+- Use Zod to parse and validate at boundaries. Zod infers the TS type — single source of truth.
+
+### Critical Code
+
+```typescript
+// Dangerous — lying to TypeScript
+const user = await res.json() as User;
+
+// Safe — validate at boundary with Zod
+import { z } from "zod";
+
+const UserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+async function fetchUser(id: number): Promise<User> {
+  const res = await fetch(`/api/users/${id}`);
+  const raw = await res.json();
+  return UserSchema.parse(raw); // throws if shape is wrong
+}
+```
+
+---
+
+# Topic 11: Typing React — Props, State, Events, Hooks
+
+### Key Rules
+- Props: use interface or type. Never any for props.
+- React.FC is discouraged — use plain function with typed props.
+- Events: React.ChangeEvent<HTMLInputElement>, React.MouseEvent<HTMLButtonElement>
+- useState: inferred from initial value. For nullable: useState<User | null>(null)
+- useRef: useRef<HTMLInputElement>(null) for DOM, useRef<number>(0) for mutable value
+- children: React.ReactNode (broadest — anything React can render)
+
+### Critical Code
+
+```typescript
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}
+
+function Button({ label, onClick, disabled = false }: ButtonProps) {
+  return <button onClick={onClick} disabled={disabled}>{label}</button>;
+}
+
+function Input() {
+  const [value, setValue] = React.useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+  return <input value={value} onChange={handleChange} />;
+}
+
+const [user, setUser] = React.useState<User | null>(null);
+
+const inputRef = React.useRef<HTMLInputElement>(null);
+inputRef.current?.focus();
+```
+
+---
+
+# Topic 12: tsconfig.json and Compiler Options
+
+### Key Options
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "ES2020"],
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] },
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+### strict is a bundle — not one flag
+- strictNullChecks: null/undefined not assignable to everything
+- noImplicitAny: parameters without annotation become any (blocked)
+- strictFunctionTypes: unsafe function parameter covariance blocked
+- useUnknownInCatchVariables: catch err typed as unknown not any
+
+Rule: Always start with strict true. Never disable it.
+
+---

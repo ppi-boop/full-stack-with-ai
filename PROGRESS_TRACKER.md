@@ -6,10 +6,10 @@
 
 ## 📍 Current Status
 
-* **Current Active Phase:** **Phase 2 — TypeScript**
-* **Current Progress:** **8 of 12 Topics Completed (66.7%)**
-* **Last Completed Topic:** **Phase 2, Topic 8: Enums vs Object Literals (`as const`)**
-* **Next Topic to Resume:** ➡️ **Phase 2, Topic 9: `unknown`, `any`, `never`, `void` & Null Safety (`strictNullChecks`)**
+* **Current Active Phase:** **Phase 3 — HTML, CSS & Browser Fundamentals**
+* **Current Progress:** **Phase 2 TypeScript 100% Complete ✅ | Phase 3: 7 topics done (CSS)**
+* **Last Completed Topic:** **Phase 3 — Responsive Navigation, Tables, Forms & Dashboards**
+* **Next Topic to Resume:** ➡️ **Phase 3 — CSS Animations, Transitions & Transforms**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our next topic is Phase 2, Topic 5 (Narrowing & Type Guards: typeof, instanceof, in, value is T). Maintain the strict teacher persona (simple definitions first, deep mechanics, zero sugarcoating).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 3 CSS. Last completed: Responsive Navigation, Tables, Forms, Dashboards. Next: CSS Animations, Transitions & Transforms. Maintain the strict teacher persona.
 ```
 
 ---
@@ -54,20 +54,32 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
   - [x] **Topic 14:** The Event Loop, Call Stack, Microtasks vs Macrotasks
   - [x] **Topic 15:** Concurrency: `Promise.all`, `allSettled`, `race`, and `any`
   - [x] **Topic 16:** Fetch API, `AbortController`, Timeouts & Memory Leaks
-- [ ] **Phase 2: TypeScript** *(In Progress: 4/12 — Week 3 in Roadmap)*
+- [x] **Phase 2: TypeScript** *(100% Completed 🎉)*
   - [x] **Topic 1:** TypeScript Mental Model (Compile-Time vs Runtime, Structural Typing & Type Inference)
   - [x] **Topic 2:** Primitive, Array, Tuple, Object & Function Types
   - [x] **Topic 3:** Interfaces vs Type Aliases; Optional (`?`) and `readonly`
   - [x] **Topic 4:** Union, Intersection, Literal Types & Discriminated Unions
-  - [x] **Topic 5:** Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`) (COMPLETED)
-  - [x] **Topic 6:** Generics (Type parameters `<T>`, constraints `K extends keyof T`) (COMPLETED)
-  - [x] **Topic 7:** Utility Types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`, etc.) (COMPLETED)
-  - [x] **Topic 8:** Enums vs Object Literals (`as const`) (COMPLETED)
-  - [ ] **Topic 9:** `unknown`, `any`, `never`, `void` & Null Safety (`strictNullChecks`)
-  - [ ] **Topic 10:** Typing API Responses & The Trust Boundary
-  - [ ] **Topic 11:** Typing React (Props, State, Events, Hooks)
-  - [ ] **Topic 12:** `tsconfig.json` & Compiler Options (`strict`, `moduleResolution`, `paths`)
-- [ ] **Phase 3: HTML, CSS, Browser & Web Fundamentals** *(Week 4 in Roadmap)*
+  - [x] **Topic 5:** Narrowing & Type Guards (`typeof`, `instanceof`, `in`, `value is T`)
+  - [x] **Topic 6:** Generics (Type parameters `<T>`, constraints `K extends keyof T`)
+  - [x] **Topic 7:** Utility Types (`Partial`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited`, etc.)
+  - [x] **Topic 8:** Enums vs Object Literals (`as const`)
+  - [x] **Topic 9:** `unknown`, `any`, `never`, `void` & Null Safety (`strictNullChecks`)
+  - [x] **Topic 10:** Typing API Responses & The Trust Boundary (Zod)
+  - [x] **Topic 11:** Typing React (Props, State, Events, Hooks)
+  - [x] **Topic 12:** `tsconfig.json` & Compiler Options (`strict`, `moduleResolution`, `paths`)
+- [ ] **Phase 3: HTML, CSS, Browser & Web Fundamentals** *(In Progress)*
+  - [x] **Topic 1:** Box Model, Display & Document Flow
+  - [x] **Topic 2:** Flexbox — One-Dimensional Layout
+  - [x] **Topic 3:** CSS Grid — Two-Dimensional Layout
+  - [x] **Topic 4:** Positioning — `static`, `relative`, `absolute`, `fixed`, `sticky`
+  - [x] **Topic 5:** Typography, Colors & CSS Custom Properties (Variables)
+  - [x] **Topic 6:** Responsive Design — Media Queries, Viewport, `rem`/`em`/`clamp`
+  - [x] **Topic 7:** Responsive Navigation, Tables, Forms & Dashboards ← **Last Completed**
+  - [ ] **Topic 8:** CSS Animations, Transitions & Transforms *(NEXT)*
+  - [ ] **Topic 9:** Browser Rendering Pipeline — Critical Rendering Path, Reflow vs Repaint
+  - [ ] **Topic 10:** Semantic HTML, Accessibility (ARIA, focus management, `alt`)
+  - [ ] **Topic 11:** Web Performance — LCP, CLS, INP, `defer`/`async`, lazy loading
+  - [ ] **Topic 12:** Browser Storage — `localStorage`, `sessionStorage`, Cookies, IndexedDB
 - [ ] **Phase 4: React Core & Reconciliation** *(Weeks 5 & 6 in Roadmap)*
 
 ### Tier 2: Beginner to Solid (Next.js & Backend)
@@ -87,13 +99,13 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Our ne
 
 ## 📚 Master Consolidated Notes Index
 
-Instead of searching through many small files, your master study notes are organized by technology / phase:
-
 * 📄 **Phase 0 (Developer Foundations):**
   * Markdown: [notes/phase_00_dev_foundations.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_00_dev_foundations.md)
   * Printable PDF: [Phase_00_Developer_Foundations.pdf](file:///Users/tagline/Documents/fullstack-ai-roadmap/Phase_00_Developer_Foundations.pdf)
 * 📄 **Phase 1 (JavaScript Fundamentals — 16 Topics Complete):**
   * Markdown: [notes/phase_01_javascript.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_01_javascript.md)
   * Printable PDF: [Phase_01_JavaScript_Master_Handbook.pdf](file:///Users/tagline/Documents/fullstack-ai-roadmap/Phase_01_JavaScript_Master_Handbook.pdf)
-* 📄 **Phase 2 (TypeScript Master Handbook — In Progress):**
+* 📄 **Phase 2 (TypeScript — 12 Topics Complete):**
   * Markdown: [notes/phase_02_typescript.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_02_typescript.md)
+* 📄 **Phase 3 (HTML, CSS & Browser Fundamentals — In Progress):**
+  * Markdown: [notes/phase_03_css.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_03_css.md)
