@@ -6,10 +6,10 @@
 
 ## 📍 Current Status
 
-* **Current Active Phase:** **Phase 3 — HTML, CSS & Browser Fundamentals**
-* **Current Progress:** **Phase 2 TypeScript 100% Complete ✅ | Phase 3: 7 topics done (CSS)**
-* **Last Completed Topic:** **Phase 3 — Responsive Navigation, Tables, Forms & Dashboards**
-* **Next Topic to Resume:** ➡️ **Phase 3 — CSS Animations, Transitions & Transforms**
+* **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
+* **Current Progress:** **Phase 3 HTML/CSS/Browser 100% Complete ✅**
+* **Last Completed Topic:** **Phase 3, Topic 12: Browser Storage (`localStorage`, `sessionStorage`, Cookies, IndexedDB)**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 1: React Mental Model — JSX, Virtual DOM & Reconciliation**
 * **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
 
 ---
@@ -74,13 +74,13 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
   - [x] **Topic 4:** Positioning — `static`, `relative`, `absolute`, `fixed`, `sticky`
   - [x] **Topic 5:** Typography, Colors & CSS Custom Properties (Variables)
   - [x] **Topic 6:** Responsive Design — Media Queries, Viewport, `rem`/`em`/`clamp`
-  - [x] **Topic 7:** Responsive Navigation, Tables, Forms & Dashboards ← **Last Completed**
-  - [ ] **Topic 8:** CSS Animations, Transitions & Transforms *(NEXT)*
-  - [ ] **Topic 9:** Browser Rendering Pipeline — Critical Rendering Path, Reflow vs Repaint
-  - [ ] **Topic 10:** Semantic HTML, Accessibility (ARIA, focus management, `alt`)
-  - [ ] **Topic 11:** Web Performance — LCP, CLS, INP, `defer`/`async`, lazy loading
-  - [ ] **Topic 12:** Browser Storage — `localStorage`, `sessionStorage`, Cookies, IndexedDB
-- [ ] **Phase 4: React Core & Reconciliation** *(Weeks 5 & 6 in Roadmap)*
+  - [x] **Topic 7:** Responsive Navigation, Tables, Forms & Dashboards
+  - [x] **Topic 8:** CSS Animations, Transitions & Transforms
+  - [x] **Topic 9:** Browser Rendering Pipeline — Critical Rendering Path, Reflow vs Repaint
+  - [x] **Topic 10:** Semantic HTML, Accessibility (ARIA, focus management, `alt`)
+  - [x] **Topic 11:** Web Performance — LCP, CLS, INP, `defer`/`async`, lazy loading
+  - [x] **Topic 12:** Browser Storage — `localStorage`, `sessionStorage`, Cookies, IndexedDB
+- [ ] **Phase 4: React Core & Reconciliation** *(Weeks 5 & 6 in Roadmap)* *(NEXT)*
 
 ### Tier 2: Beginner to Solid (Next.js & Backend)
 - [ ] **Phase 5: Next.js App Router & Vercel AI SDK** *(Project 1: Admin Dashboard)*

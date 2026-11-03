@@ -253,3 +253,163 @@ input:focus {
 ```
 
 ---
+
+# Topic 8: CSS Animations, Transitions & Transforms
+
+### Key Rules
+- **Transition** = smooth change between two states triggered by a state change (hover, class toggle). Needs a trigger.
+- **Animation** = plays automatically using `@keyframes`. Full control — loops, direction, delay, fill-mode.
+- **Transform** = visual-only movement. Does NOT affect document flow. Other elements don't react to it.
+- **Performance rule:** Only animate `transform` and `opacity` — they are GPU-accelerated and never cause reflow. Never animate `width`, `height`, `top`, `left`, `margin` — they trigger reflow on every frame = jank.
+
+### Transition
+```css
+.button {
+  background: hsl(220, 90%, 56%);
+  transition: background 200ms ease, transform 150ms ease;
+  /* property | duration | timing-function */
+}
+.button:hover {
+  background: hsl(220, 90%, 40%);
+  transform: scale(1.05);
+}
+```
+
+Timing functions: `ease` (default), `ease-in`, `ease-out`, `ease-in-out`, `linear`, `cubic-bezier()`
+
+### Transform — never use top/left to move things
+```css
+/* Chain multiple transforms on ONE property — second one overrides if split */
+.card:hover {
+  transform: translateY(-4px) scale(1.02); /* correct */
+}
+
+/* Move with transform, NOT with left/top */
+.box { transition: transform 300ms; }
+.box:hover { transform: translateX(20px); } /* GPU-accelerated, smooth */
+```
+
+### @keyframes Animation
+```css
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  animation: fadeInUp 400ms ease-out forwards;
+  /* name | duration | timing | fill-mode */
+}
+```
+
+`animation-fill-mode: forwards` — element keeps the final keyframe state after animation ends. Without it, element snaps back to its original state (broken-looking).
+
+
+### Accessibility
+```css
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+```
+
+---
+
+# Topic 9: Browser Rendering Pipeline
+
+### The Pipeline
+HTML to DOM to CSSOM to Render Tree to Layout (Reflow) to Paint to Composite
+
+### Reflow vs Repaint vs Composite
+- Reflow = geometry changes (width, height, margin, top, display). Most expensive.
+- Repaint = visual changes only (color, background). No layout change.
+- Composite only = transform and opacity. GPU-accelerated. Free. Always prefer for animation.
+
+### Layout Thrashing — batch reads before writes
+```javascript
+// Bad: forces reflow every iteration
+boxes.forEach(b => { const w = b.offsetWidth; b.style.width = w*2+"px"; });
+
+// Good: all reads first, all writes after
+const widths = Array.from(boxes).map(b => b.offsetWidth);
+boxes.forEach((b, i) => { b.style.width = widths[i]*2+"px"; });
+```
+
+### Script and CSS blocking
+- script in head without defer/async blocks HTML parsing
+- defer: after HTML parsed, in order. Use for app scripts.
+- async: as soon as downloaded, any order. Use for 3rd-party scripts.
+- CSS is render-blocking — browser will not paint until all CSS is downloaded.
+
+---
+
+# Topic 10: Semantic HTML and Accessibility
+
+### Semantic elements
+header, nav, main, article, section, aside, footer, figure, figcaption.
+Use button for actions, a href for navigation. Never a div with an onClick.
+
+### ARIA — only when native HTML is insufficient
+- aria-label: accessible name for elements without visible text
+- aria-expanded: state of collapsible elements
+- aria-live="polite": announces dynamic content to screen readers
+- aria-hidden="true": hides decorative elements from screen readers
+- Meaningful alt on all images. Empty alt="" on decorative ones.
+
+### Focus — never remove outline, replace it
+```css
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+```
+
+---
+
+# Topic 11: Web Performance
+
+### Core Web Vitals
+- LCP (Largest Contentful Paint) < 2.5s: preload hero image, fetchpriority="high"
+- CLS (Cumulative Layout Shift) < 0.1: always set width and height on images
+- INP (Interaction to Next Paint) < 200ms: avoid long JS tasks on main thread
+
+### Key techniques
+```html
+<link rel="preload" as="image" href="/hero.webp">
+<img src="/hero.webp" fetchpriority="high" width="1200" height="600" alt="Hero">
+<img src="/card.jpg" width="400" height="300" alt="Card">
+<img src="/photo.jpg" loading="lazy" width="800" height="600" alt="Photo">
+<script src="app.js" defer></script>
+<script src="analytics.js" async></script>
+```
+
+---
+
+# Topic 12: Browser Storage
+
+| Storage | Capacity | Persists | Sent to server |
+|---|---|---|---|
+| localStorage | 5MB | Until cleared | No |
+| sessionStorage | 5MB | Until tab closes | No |
+| Cookie | 4KB | Set expiry | Yes every request |
+| IndexedDB | Hundreds MB | Until cleared | No |
+
+### localStorage — strings only, synchronous
+```javascript
+localStorage.setItem("theme", "dark");
+localStorage.setItem("user", JSON.stringify({ id: 1 }));
+const theme = localStorage.getItem("theme");
+const user  = JSON.parse(localStorage.getItem("user") ?? "null");
+
+// SSR guard — window does not exist on server
+if (typeof window !== "undefined") {
+  localStorage.setItem("key", "value");
+}
+```
+
+### Cookies — auth must be server-set
+- HttpOnly: JS cannot read the cookie. Prevents XSS token theft.
+- Secure: sent over HTTPS only.
+- SameSite=Strict or Lax: prevents CSRF attacks.
+- Auth tokens must be HttpOnly cookies set by server. Never store in localStorage.
+
+---
