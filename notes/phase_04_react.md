@@ -87,3 +87,66 @@ State Change Trigger
 ```
 
 ---
+
+# Topic 2: Props, State, "State as a Snapshot" & Batching
+
+### 1. Simple Definitions
+* **Props:** Read-only arguments a parent passes to a child. To "change" a prop, the parent changes its own state.
+* **State:** Memory a component keeps between renders (a plain `let` is reset every render).
+* **Snapshot:** Each render is a photo. Inside one render, `count` is a fixed value, even after you call `setCount`.
+* **Batching:** All `setState` calls in one event produce one re-render (React 18+ batches everywhere).
+* **Updater function:** `setCount(c => c + 1)`. Gets the latest queued value, not the snapshot.
+
+### 2. The Essentials (6 rules)
+1. `setCount(count + 1)` three times = +1, not +3. Use `setCount(c => c + 1)` when the new value depends on the old one.
+2. `console.log(count)` right after `setCount` shows the OLD value (the snapshot is frozen).
+3. **Never mutate state.** Same reference means React skips the update. Replace objects/arrays with new ones.
+4. `useState(props.x)` reads the value **only on the first render**. Reset with `key`: `<Editor key={doc.id} />`.
+5. Hooks must run in the same order, at the top level (never inside `if` or loops).
+6. Derive values during render (e.g. `fullName`); don't store them. Prefer one `status` (`'idle' | 'loading' | 'error' | 'success'`) over several booleans.
+
+### 3. Code Example
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);   // snapshot: 0 + 1
+    setCount(count + 1);   // snapshot: 0 + 1  -> result is 1
+  }
+  function handleClickRight() {
+    setCount(c => c + 1);
+    setCount(c => c + 1);  // result is 2
+  }
+}
+```
+Immutable updates:
+```jsx
+setUser(u => ({ ...u, age: u.age + 1 }));                              // object
+setItems(items => [...items, newItem]);                                // add
+setItems(items => items.filter(i => i.id !== id));                     // remove
+setItems(items => items.map(i => i.id === id ? { ...i, done: true } : i)); // update one
+```
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `setCount(count + 1)` ×3 | Same snapshot each time, so +1 total |
+| `user.age = 21; setUser(user)` | Same reference, React bails out, UI stale |
+| `todos.push(x); setTodos(todos)` | Mutation plus same reference |
+| `useState(props.name)` expecting live sync | Initial value only |
+| Hook inside `if` | Breaks call-order matching |
+| `setTimeout(() => alert(n))` | Alert shows the `n` from the render where you clicked |
+
+### 5. Practice Checks (passed)
+* Queue: `setCount(count+1); setCount(c=>c*10); setCount(count+3); setCount(c=>c+1)` from 0 gives **4** (a plain value replaces everything before it; only `c =>` sees the queued value).
+* `user.age = 21; setUser(user)` doesn't update (same reference). `setUser({...user, age: 21})` does (new reference).
+
+### 6. Optional / Later (not needed now)
+* React stores hooks as a list of slots on the Fiber node, matched by call order. That's why order must not change.
+* Queue processing: a plain value replaces the result; an updater transforms the previous result.
+* Equal value check uses `Object.is`; React may render the component once more but skips children and effects.
+* `useState(() => expensive())` (lazy init) runs once; `useState(expensive())` runs every render.
+* `flushSync` forces a synchronous flush (rare). React 17 batched only inside React event handlers.
+
+---

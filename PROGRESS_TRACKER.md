@@ -7,10 +7,10 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
-* **Current Progress:** **Phase 4 in progress — Topic 1 complete (1/12)**
-* **Last Completed Topic:** **Phase 4, Topic 1: React Mental Model — JSX, Virtual DOM & Reconciliation**
-* **Next Topic to Resume:** ➡️ **Phase 4, Topic 2: Props, State, "State as a Snapshot" & Batching (`useState`, updater function)**
-* **Teaching Persona Active:** Strict Teacher, zero sugarcoating. Always explain concepts and definitions in simple, easy-to-understand language first, followed by deep first-principles mechanics, real-world code, and rigorous challenge questions.
+* **Current Progress:** **Phase 4 in progress — Topics 1-2 complete (2/12)**
+* **Last Completed Topic:** **Phase 4, Topic 2: Props, State, "State as a Snapshot" & Batching**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 3: Rendering & Re-rendering Triggers, Component Purity & Strict Mode**
+* **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
 
 ---
 
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 1 React Mental Model. Next: Topic 2 Props, State, State as Snapshot & Batching. Maintain the strict teacher persona.
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 2 Props, State, State as Snapshot & Batching. Next: Topic 3 Rendering & Re-rendering Triggers, Purity & Strict Mode. Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -82,8 +82,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
   - [x] **Topic 12:** Browser Storage — `localStorage`, `sessionStorage`, Cookies, IndexedDB
 - [ ] **Phase 4: React Core & Reconciliation** *(In Progress)*
   - [x] **Topic 1:** React Mental Model — JSX, Virtual DOM & Reconciliation
-  - [ ] **Topic 2:** Props, State, "State as a Snapshot" & Batching (`useState`, updater function) *(NEXT)*
-  - [ ] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode
+  - [x] **Topic 2:** Props, State, "State as a Snapshot" & Batching (`useState`, updater function)
+  - [ ] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode *(NEXT)*
   - [ ] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)
   - [ ] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values
   - [ ] **Topic 6:** Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview)
