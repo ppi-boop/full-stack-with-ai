@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
-* **Current Progress:** **Phase 4 in progress — Topics 1-2 complete (2/12)**
-* **Last Completed Topic:** **Phase 4, Topic 2: Props, State, "State as a Snapshot" & Batching**
-* **Next Topic to Resume:** ➡️ **Phase 4, Topic 3: Rendering & Re-rendering Triggers, Component Purity & Strict Mode**
+* **Current Progress:** **Phase 4 in progress — Topics 1-3 complete (3/12)**
+* **Last Completed Topic:** **Phase 4, Topic 3: Rendering & Re-rendering Triggers, Component Purity & Strict Mode**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 4: Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)**
 * **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
 
 ---
@@ -19,7 +19,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 2 Props, State, State as Snapshot & Batching. Next: Topic 3 Rendering & Re-rendering Triggers, Purity & Strict Mode. Use the practical teacher persona (essentials only, 2 practice questions per topic).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 3 Rendering Triggers, Purity & Strict Mode. Next: Topic 4 Side Effects & Lifecycle (useEffect, cleanup, dependencies, race conditions). Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -83,8 +83,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
 - [ ] **Phase 4: React Core & Reconciliation** *(In Progress)*
   - [x] **Topic 1:** React Mental Model — JSX, Virtual DOM & Reconciliation
   - [x] **Topic 2:** Props, State, "State as a Snapshot" & Batching (`useState`, updater function)
-  - [ ] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode *(NEXT)*
-  - [ ] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)
+  - [x] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode
+  - [ ] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions) *(NEXT)*
   - [ ] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values
   - [ ] **Topic 6:** Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview)
   - [ ] **Topic 7:** Context API & Prop Drilling vs State Management

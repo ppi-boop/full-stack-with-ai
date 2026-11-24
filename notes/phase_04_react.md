@@ -150,3 +150,60 @@ setItems(items => items.map(i => i.id === id ? { ...i, done: true } : i)); // up
 * `flushSync` forces a synchronous flush (rare). React 17 batched only inside React event handlers.
 
 ---
+
+# Topic 3: Rendering, Re-rendering Triggers, Component Purity & Strict Mode
+
+### 1. Simple Definitions
+* **Render:** React calling your component function to get the new UI description. Does NOT mean the real DOM changed.
+* **Pure component:** Same props + state always give the same JSX, and rendering changes nothing outside itself (like a math function).
+* **Side effect:** Anything that reaches outside the function: fetch, timers, DOM writes, editing outer variables.
+* **Strict Mode:** Dev-only wrapper that renders components twice (and re-runs effects once extra) to expose impure code. Does nothing in production.
+
+### 2. The Essentials
+**Only 3 things trigger a re-render:**
+1. The component's own state changes.
+2. Its parent re-renders (children re-render by default, even with identical props).
+3. A context it reads changes.
+
+**Purity rules:**
+1. Don't change anything outside the component during render (no outer variables, no mutating props/state).
+2. No side effects in the render body. Put them in event handlers or `useEffect` (Topic 4).
+3. Don't use `Math.random()` / `Date.now()` in render output or keys.
+4. Mutating local variables created inside the render is fine.
+
+### 3. Code Example
+```jsx
+// IMPURE: mutates an outer variable (breaks in Strict Mode: #2, #4, #6)
+let guestCount = 0;
+function Guest() { guestCount++; return <p>Guest #{guestCount}</p>; }
+
+// PURE
+function Guest({ number }) { return <p>Guest #{number}</p>; }
+
+// Side effect in a handler, not in render
+function Save({ doc }) {
+  function handleClick() { fetch("/save", { method: "POST", body: JSON.stringify(doc) }); }
+  return <button onClick={handleClick}>Save</button>;
+}
+```
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `fetch` / `setInterval` in the component body | Runs every render; fetch + `setState` makes an infinite loop |
+| Editing an outer variable during render | Output depends on how many times React renders |
+| Mutating `props` | Props are read-only; corrupts the parent's data |
+| Component defined inside another component | New type each render, so remount and state reset |
+| "My `console.log` ran twice" | Strict Mode (dev only) |
+| "Props didn't change, so child won't re-render" | Wrong. Parent re-render re-renders the child (stop with `React.memo`, Topic 6) |
+
+### 5. Practice Checks (passed)
+* Button click in `Parent` re-renders `Child` once (trigger: parent re-render).
+* `fetch(...).then(setUser)` in the render body loops forever: `setUser` changes state, which re-renders, which runs the fetch again. Fix: `useEffect` or an event handler.
+
+### 6. Optional / Later (not needed now)
+* The render phase may be paused or restarted by React, which is another reason it must be pure.
+* Strict Mode also checks that refs and effects clean up properly.
+* React Compiler (Topic 6) relies on components being pure to auto-memoize safely.
+
+---
