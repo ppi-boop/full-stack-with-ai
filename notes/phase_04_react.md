@@ -207,3 +207,66 @@ function Save({ doc }) {
 * React Compiler (Topic 6) relies on components being pure to auto-memoize safely.
 
 ---
+
+# Topic 4: Side Effects & Lifecycle (`useEffect`)
+
+### 1. Simple Definitions
+* **`useEffect`:** Runs your code AFTER React has put the UI on screen. Home for side effects: fetch, subscriptions, timers, manual DOM work.
+* **Dependency array:** Values the effect uses. React re-runs the effect only when one changed.
+* **Cleanup function:** What you `return` from the effect. Runs before the next effect run and on unmount. Undoes what the effect set up.
+* **Race condition:** Two async requests in flight; the older one finishes last and overwrites the newer result.
+
+### 2. The Essentials
+1. **Three forms:** no array = every render (rare); `[]` = once after mount; `[id]` = after mount and whenever `id` changes.
+2. **An effect sees the snapshot of the render that created it** (Topic 2). Put every prop/state it reads in the deps. Anything long-lived (interval, listener, request) keeps the values from the render that made it.
+3. **Cleanup anything that must be undone:** `clearInterval`, `removeEventListener`, `socket.close()`, `controller.abort()`.
+4. **Strict Mode (dev):** mount, cleanup, mount again. If the second run breaks, your cleanup is missing.
+5. **Fetch race fix:** `AbortController` in the effect + `return () => controller.abort()`. Ignore `AbortError` in `catch`.
+6. **You might not need an effect:** derived data (compute in render), responding to a user action (event handler), resetting state on prop change (`key`), production data fetching (TanStack Query / Next.js server components in Phase 5).
+
+### 3. Code Example
+```jsx
+function Profile({ id }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch(`/api/users/${id}`, { signal: controller.signal })
+      .then(r => r.json())
+      .then(setUser)
+      .catch(err => { if (err.name !== "AbortError") console.error(err); });
+    return () => controller.abort();
+  }, [id]);
+
+  return <p>{user?.name}</p>;
+}
+
+// Interval: updater avoids needing `seconds` in deps; cleanup stops it
+useEffect(() => {
+  const id = setInterval(() => setSeconds(s => s + 1), 1000);
+  return () => clearInterval(id);
+}, []);
+```
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Missing dependency (`[]` but reads `count`) | Stale closure: interval/listener keeps seeing the first render's value |
+| Object/array literal in deps | New reference every render, so effect runs every render |
+| `setState` in an effect with no deps | Re-render, effect again, infinite loop |
+| No cleanup on interval/listener | Leaks and duplicates (Strict Mode exposes it) |
+| `useEffect(async () => ...)` | Effect must return cleanup or nothing, not a Promise. Define an async function inside and call it |
+| Effect to compute derived state | Extra render with briefly wrong data. Compute in render |
+| Silencing `exhaustive-deps` lint | The warning is almost always right |
+
+### 5. Practice Checks (passed)
+* Search-box race: the older "re" request finishes last, so the user sees the "re" results. Cleanup runs before the next effect and aborts the old request.
+* Demo (stale closure): `useEffect(..., [])` with an interval reading `count` logs 0 forever; with `[count]` it logs 1, 2, 3 because cleanup clears the old interval and a new one sees the new render.
+* Reading stale state in a long-lived callback: fix with `[count]` in deps (or a ref, Topic 5). `c => c + 1` fixes *writing* state, not *reading* it.
+
+### 6. Optional / Later (not needed now)
+* `useLayoutEffect` runs before paint (measuring DOM). Rarely needed.
+* `useEffectEvent` reads the latest values without making them dependencies.
+* Effects don't run on the server (matters for Next.js, Phase 5).
+
+---

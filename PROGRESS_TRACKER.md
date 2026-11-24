@@ -7,9 +7,10 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
-* **Current Progress:** **Phase 4 in progress — Topics 1-3 complete (3/12)**
-* **Last Completed Topic:** **Phase 4, Topic 3: Rendering & Re-rendering Triggers, Component Purity & Strict Mode**
-* **Next Topic to Resume:** ➡️ **Phase 4, Topic 4: Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)**
+* **Current Progress:** **Phase 4 in progress — Topics 1-4 complete (4/12)**
+* **Last Completed Topic:** **Phase 4, Topic 4: Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 5: `useRef` — Escape Hatches, DOM Access & Storing Mutable Values**
+* **Weak spot to revisit:** "Stale snapshot / closures" (long-lived callbacks see old values). Missed in Topic 2, 4; fixed with a live demo. Recheck it in Topic 5 (refs) and Topic 6 (`useCallback`).
 * **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
 
 ---
@@ -19,7 +20,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 3 Rendering Triggers, Purity & Strict Mode. Next: Topic 4 Side Effects & Lifecycle (useEffect, cleanup, dependencies, race conditions). Use the practical teacher persona (essentials only, 2 practice questions per topic).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 4 Side Effects & Lifecycle (useEffect). Next: Topic 5 useRef (escape hatches, DOM access, mutable values). Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -84,8 +85,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
   - [x] **Topic 1:** React Mental Model — JSX, Virtual DOM & Reconciliation
   - [x] **Topic 2:** Props, State, "State as a Snapshot" & Batching (`useState`, updater function)
   - [x] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode
-  - [ ] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions) *(NEXT)*
-  - [ ] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values
+  - [x] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)
+  - [ ] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values *(NEXT)*
   - [ ] **Topic 6:** Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview)
   - [ ] **Topic 7:** Context API & Prop Drilling vs State Management
   - [ ] **Topic 8:** Advanced Hooks & React 19 (`useTransition`, `useOptimistic`, `useActionState`, `use`)
