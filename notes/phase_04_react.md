@@ -270,3 +270,61 @@ useEffect(() => {
 * Effects don't run on the server (matters for Next.js, Phase 5).
 
 ---
+
+# Topic 5: `useRef` — Escape Hatches, DOM Access & Storing Mutable Values
+
+### 1. Simple Definitions
+* **Ref:** A box `{ current: ... }` React keeps between renders. Changing `ref.current` does NOT re-render.
+* **State vs ref:** State shows on screen and re-renders when changed. A ref holds values that don't appear on screen, and changing it is silent.
+* **Escape hatch:** A way outside React's "describe the UI" model (focus an input, play a video). Use sparingly.
+
+### 2. The Essentials
+1. A ref is the same box every render and is never a snapshot (always holds the latest value).
+2. **Use 1: DOM access.** `<input ref={inputRef} />`, then `inputRef.current.focus()`. Use for focus, scroll, measure, media. Prefer it over `document.querySelector`.
+3. **Use 2: non-display values.** Timer IDs, previous values, sockets, "first render" flags.
+4. Don't read or write `ref.current` during render (breaks purity). Use event handlers and effects.
+5. `ref.current` is `null` until the component mounts.
+6. **Stale-closure fix:** keep a ref in sync with state, and have the long-lived callback read the ref.
+
+### 3. Code Example
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  const latest = useRef(count);                          // 1. create the box
+
+  useEffect(() => { latest.current = count; }, [count]); // 2. keep it fresh
+
+  useEffect(() => {
+    const id = setInterval(() => console.log(latest.current), 1000); // 3. READ the ref
+    return () => clearInterval(id);
+  }, []);
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+Compare: `[count]` in deps restarts the interval on each change; the ref version keeps one interval and still reads the live value.
+
+### 4. State or Ref?
+| Situation | Use |
+|---|---|
+| Shown on screen / must update the UI | State |
+| Timer ID, socket, previous value | Ref |
+| Latest value inside a long-lived callback | Ref |
+| Focus, scroll, measure a DOM node | Ref |
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Displayed data stored in a ref | No re-render, so the UI stays stale |
+| Reading `ref.current` in the render body | Unpredictable output, breaks purity |
+| `inputRef.current.focus()` on first render | `current` is `null` |
+| `document.querySelector` inside React | Bypasses React |
+| Ref used to dodge a real deps bug | Hides the stale-data problem |
+
+### 6. Practice Checks (passed)
+* Search text shown on screen = state. `setTimeout` ID = ref. Previous page number used only in an effect = ref.
+* Stale interval fix: create the ref, sync it in an effect on `[count]`, and READ `latest.current` in the interval (reading `count` there stays stale).
+
+### 7. Optional / Later (not needed now)
+* `forwardRef` / React 19 `ref` as a prop; callback refs (`ref={el => ...}`); `useImperativeHandle`.
+
+---

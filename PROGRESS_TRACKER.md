@@ -7,10 +7,10 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
-* **Current Progress:** **Phase 4 in progress — Topics 1-4 complete (4/12)**
-* **Last Completed Topic:** **Phase 4, Topic 4: Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)**
-* **Next Topic to Resume:** ➡️ **Phase 4, Topic 5: `useRef` — Escape Hatches, DOM Access & Storing Mutable Values**
-* **Weak spot to revisit:** "Stale snapshot / closures" (long-lived callbacks see old values). Missed in Topic 2, 4; fixed with a live demo. Recheck it in Topic 5 (refs) and Topic 6 (`useCallback`).
+* **Current Progress:** **Phase 4 in progress — Topics 1-5 complete (5/12)**
+* **Last Completed Topic:** **Phase 4, Topic 5: `useRef` — Escape Hatches, DOM Access & Storing Mutable Values**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 6: Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview)**
+* **Weak spot to revisit:** "Stale snapshot / closures" (long-lived callbacks see old values). Missed in Topics 2 and 4, partly in 5 (forgot to READ the ref). Recheck in Topic 6 (`useCallback` deps).
 * **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
 
 ---
@@ -20,7 +20,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 4 Side Effects & Lifecycle (useEffect). Next: Topic 5 useRef (escape hatches, DOM access, mutable values). Use the practical teacher persona (essentials only, 2 practice questions per topic).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 5 useRef. Next: Topic 6 Memoization & Performance (useMemo, useCallback, React.memo, Compiler). Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -86,8 +86,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
   - [x] **Topic 2:** Props, State, "State as a Snapshot" & Batching (`useState`, updater function)
   - [x] **Topic 3:** Rendering & Re-rendering Triggers, Component Purity & Strict Mode
   - [x] **Topic 4:** Side Effects & Lifecycle (`useEffect`, cleanup, dependencies, race conditions)
-  - [ ] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values *(NEXT)*
-  - [ ] **Topic 6:** Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview)
+  - [x] **Topic 5:** `useRef` — Escape Hatches, DOM Access & Storing Mutable Values
+  - [ ] **Topic 6:** Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler overview) *(NEXT)*
   - [ ] **Topic 7:** Context API & Prop Drilling vs State Management
   - [ ] **Topic 8:** Advanced Hooks & React 19 (`useTransition`, `useOptimistic`, `useActionState`, `use`)
   - [ ] **Topic 9:** Custom Hooks & Logic Extraction
