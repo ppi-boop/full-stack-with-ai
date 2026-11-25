@@ -328,3 +328,60 @@ Compare: `[count]` in deps restarts the interval on each change; the ref version
 * `forwardRef` / React 19 `ref` as a prop; callback refs (`ref={el => ...}`); `useImperativeHandle`.
 
 ---
+
+# Topic 6: Memoization & Performance (`useMemo`, `useCallback`, `React.memo`, Compiler)
+
+### 1. Simple Definitions
+* **Memoization:** Remember a result and reuse it when the inputs haven't changed.
+* **`React.memo`:** Skips re-rendering a component when all its props are the same (shallow `Object.is` per prop).
+* **`useMemo`:** Remembers a computed value (or stabilizes an object/array reference).
+* **`useCallback`:** Remembers a function so it keeps the same reference until deps change.
+
+### 2. The Essentials
+1. Re-rendering is normal and usually fast. Memoize only after **measuring** a slow spot (React DevTools Profiler).
+2. `React.memo` only helps if props keep the **same reference**.
+3. **The trap:** inline objects, arrays and functions (`{}`, `[]`, `() => {}`, `.filter(...)`) are new every render, so memo never skips.
+4. `useCallback` helps only when the function goes to a `memo`'d child or is an effect dependency.
+5. `useMemo` for expensive computations or to stabilize a reference.
+6. Deps rules = `useEffect` rules. Missing deps cause a **stale closure** (`useCallback(() => log(count), [])` always uses the first `count`).
+7. **Don't memoize:** cheap work, rarely re-rendered components, props that change every time anyway, or anything unmeasured.
+8. **Fix structure first:** move state down into a small component, or pass `children`.
+9. **React Compiler:** build-time auto-memoization; needs pure components (Topic 3). Check the official docs for the status on your React version.
+
+### 3. Code Example
+```jsx
+const HeavyList = React.memo(function HeavyList({ rows, onSelect }) { /* ... */ });
+
+function Page({ users }) {
+  const rows = useMemo(() => users.filter(u => u.active), [users]);   // stable array
+  const onSelect = useCallback(id => console.log(id), []);            // stable function
+  return <HeavyList rows={rows} onSelect={onSelect} />;
+}
+
+// BETTER: move state down so Page never re-renders on keystrokes
+function SearchBox() {
+  const [text, setText] = useState("");
+  return <input value={text} onChange={e => setText(e.target.value)} />;
+}
+```
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `React.memo` + inline `{}` / `() => {}` prop | New reference each render, memo never skips |
+| `useCallback` with no memo'd child / effect dep | Adds cost, no benefit |
+| Missing deps in `useCallback` / `useMemo` | Stale closure |
+| Memoizing everything "just in case" | More code, more bugs, often slower |
+| Memoizing before measuring | May fix something that isn't slow |
+| Mutating a memoized value | Same reference, so the cached result is wrong |
+
+### 5. Practice Checks
+* **Passed:** `useCallback(() => console.log(count), [])` prints `0, 0, 0` over three clicks (stale snapshot from the first render). Fix: `[count]`, or drop `useCallback` if nothing needs a stable reference.
+* **Explained, revisit in the project:** `memo`'d list still re-renders because `users.filter(...)` and `id => ...` are new references each render. Fix: `useMemo` / `useCallback`, or move the input state into its own component.
+
+### 6. Optional / Later (not needed now)
+* `memo` with a custom comparison function (rarely a good idea).
+* `useMemo` is a hint, not a guarantee; React may drop the cache.
+* List virtualization (`react-window`) beats memoizing for thousands of rows.
+
+---
