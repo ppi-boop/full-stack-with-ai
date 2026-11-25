@@ -671,3 +671,48 @@ function SignupForm() {
 * Mapping server errors onto fields ("email already taken").
 
 ---
+
+# Topic 11: React Architecture, Component Composition & Patterns (skimmed, not practised)
+
+> **Status:** Lower priority. Read the 3 essentials; practise them in the mini project. Folder structure will come naturally in Next.js (Phase 5).
+
+### 1. The 3 Essentials
+1. **Compose with `children` / slot props.** The component owns the layout; the caller supplies the content. Also avoids prop drilling.
+   ```jsx
+   <Card header={<h2>Orders</h2>} footer={<Pagination />}>
+     <OrdersTable />
+   </Card>
+   ```
+2. **Where state lives:** in the lowest component that needs it (colocation). If two siblings need it, lift it to their closest common parent (props down, callbacks up). Use context/store only if lifting means passing through many layers. Derive instead of duplicating state.
+3. **Handle 4 states** (loading, error, **empty**, success) and use **error boundaries** (`react-error-boundary`) at meaningful boundaries (a page or widget). They catch **render** errors only, NOT errors in event handlers, async code (`fetch`) or on the server.
+
+### 2. Quick Reference
+* **Props API:** prefer `variant="primary"` / `size="lg"` over boolean explosions (`isPrimary isDanger isLarge`). Spread `...rest` onto the root element. Give sensible defaults.
+* **Logic vs UI:** custom hook (logic) + dumb component (JSX) replaces the old container/presentational split.
+* **Compound components:** `Tabs`, `Tabs.Tab`, `Tabs.Panel` share state via context (Topic 7).
+* **Folders:** start by type (`components/`, `hooks/`); move to by feature (`features/orders/{components,hooks,api.ts,types.ts}`) as the app grows.
+* **Rule of three:** abstract only after writing it three times.
+
+### 3. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Component defined inside another component | New type every render, so remount and state reset |
+| Boolean prop explosion | Contradictory states, messy API |
+| Giant 500-line component | Hard to read and test |
+| All state global | Needless re-renders and indirection |
+| Derived data stored in state | Out-of-sync copies |
+| Abstracting too early | Wrong abstraction costs more than duplication |
+| Only one error boundary at the top | One bug blanks the whole app |
+| Expecting error boundaries to catch `fetch` errors | They only catch render errors |
+| Forgetting the empty state | Looks broken |
+
+### 4. Practice Checks (not attempted; answers given)
+* Card usage: `header` slot + `children` + optional `footer`; better than string props because callers can pass any JSX.
+* `FilterBar` + `ProductList` siblings: put `category` in `ProductsPage`; pass `category` + `onCategoryChange` to `FilterBar` and `category` to `ProductList`. No context needed (one level).
+
+### 5. Optional / Later (not needed now)
+* Render props and HOCs (older patterns replaced by hooks).
+* Polymorphic `as` components, headless UI libraries (Radix, shadcn/ui), Storybook.
+* Barrel files (`index.ts` re-exports) can hurt tree-shaking.
+
+---

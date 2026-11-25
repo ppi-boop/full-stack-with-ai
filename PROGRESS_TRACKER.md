@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 4 — React Core & Reconciliation**
-* **Current Progress:** **Phase 4 in progress — Topics 1-10 complete (10/12)**
-* **Last Completed Topic:** **Phase 4, Topic 10: Forms & Validation (Controlled vs Uncontrolled, React Hook Form / Zod)**
-* **Next Topic to Resume:** ➡️ **Phase 4, Topic 11: React Architecture, Component Composition & Patterns** (or start the mini project first; its first task is to write `useLocalStorage`, `useDebounce` and `useFetch` from memory)
+* **Current Progress:** **Phase 4 in progress — Topics 1-11 complete (11/12; Topic 11 only skimmed)**
+* **Last Completed Topic:** **Phase 4, Topic 11: React Architecture, Component Composition & Patterns (skimmed; practise in the mini project)**
+* **Next Topic to Resume:** ➡️ **Phase 4, Topic 12: React Testing (React Testing Library & Vitest/Jest)** (or start the mini project first; its first task is to write `useLocalStorage`, `useDebounce` and `useFetch` from memory)
 * **Weak spots to revisit:** (1) "Stale snapshot / closures" improved: predicted the stale `useCallback` correctly in Topic 6. (2) "A new reference every render defeats `React.memo`" was not solved in Topic 6 (V1). Seen again in Topic 7 (C2): fixed by moving state down; and Topic 8 (A2: `use(fetch())` in render, not self-solved, same root cause: side effect + new reference in render). Recheck in the mini React project.
 * **Planned:** Start a small real React project now (e.g. todo list with search + fetch from a public API) to practise state, effects, refs and memoization together.
 * **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
@@ -21,7 +21,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 10 Forms & Validation. Next: Topic 11 React Architecture, Composition & Patterns (or the mini project first). Use the practical teacher persona (essentials only, 2 practice questions per topic).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are in Phase 4 React Core. Last completed: Topic 11 React Architecture (skimmed). Next: Topic 12 React Testing (or the mini project first). Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -93,8 +93,8 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. We are
   - [x] **Topic 8:** Advanced Hooks & React 19 (`useTransition`, `useOptimistic`, `useActionState`, `use`)
   - [x] **Topic 9:** Custom Hooks & Logic Extraction
   - [x] **Topic 10:** Forms & Validation (Controlled vs Uncontrolled, React Hook Form / Zod)
-  - [ ] **Topic 11:** React Architecture, Component Composition & Patterns *(NEXT)*
-  - [ ] **Topic 12:** React Testing (React Testing Library & Vitest/Jest)
+  - [x] **Topic 11:** React Architecture, Component Composition & Patterns *(skimmed; practise in the mini project)*
+  - [ ] **Topic 12:** React Testing (React Testing Library & Vitest/Jest) *(NEXT)*
 
 ### Tier 2: Beginner to Solid (Next.js & Backend)
 - [ ] **Phase 5: Next.js App Router & Vercel AI SDK** *(Project 1: Admin Dashboard)*
