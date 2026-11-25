@@ -517,3 +517,86 @@ function Form() {
 * After an `await` inside a transition, later state updates need their own `startTransition` (check the React 19 docs when needed).
 
 ---
+
+# Topic 9: Custom Hooks & Logic Extraction
+
+### 1. Simple Definitions
+* **Custom hook:** A function whose name starts with `use` and that calls other hooks. Moves reusable logic out of components.
+* **What is shared:** the logic (code), NOT the state. Each call gets its own independent state.
+* **Logic extraction:** Move stateful code out so the component only describes the UI.
+
+### 2. The Essentials
+1. A custom hook is just a function that uses hooks (no special API).
+2. Two components calling the same hook get two separate states. To share state, use context or a store (Topic 7).
+3. Rules of hooks still apply: top level only, only in components/hooks, name starts with `use`.
+4. **Extract when:** same stateful logic in 2+ places, or a component mixes too many concerns. Name it by WHAT, not HOW (`useOnlineStatus`).
+5. **Don't extract:** one-time wrapper around one `useState`; logic with no hooks (use a plain function); abstractions that hide what's happening.
+6. Return an array for 2 values (like `useState`); an object for more.
+7. Real libraries (TanStack Query, `usehooks-ts`) provide production-grade versions; write your own to learn.
+
+### 3. Code Example
+```jsx
+function useToggle(initial = false) {
+  const [on, setOn] = useState(initial);
+  const toggle = () => setOn(v => !v);
+  return [on, toggle];
+}
+
+function useDebounce(value, delay = 300) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+  return debounced;
+}
+
+function useFetch(url) {
+  const [state, setState] = useState({ status: "loading", data: null, error: null });
+  useEffect(() => {
+    const controller = new AbortController();
+    setState({ status: "loading", data: null, error: null });
+    fetch(url, { signal: controller.signal })
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .then(data => setState({ status: "success", data, error: null }))
+      .catch(error => { if (error.name !== "AbortError") setState({ status: "error", data: null, error }); });
+    return () => controller.abort();
+  }, [url]);
+  return state;
+}
+
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {            // lazy init: runs once
+    try {
+      const stored = localStorage.getItem(key);
+      return stored !== null ? JSON.parse(stored) : initialValue;
+    } catch { return initialValue; }
+  });
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+  return [value, setValue];
+}
+```
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Expecting components to share the hook's state | Each call has its own state; use context/store |
+| Name without `use` | Linter can't enforce the rules of hooks |
+| Hook inside `if` / loop | Breaks call order |
+| Missing deps inside the hook | Same stale closure bugs |
+| Returning a new object/function every render | Consumers with it in deps re-run effects every render |
+| Extracting too early or too much | More indirection, harder to read |
+| Hook for non-hook logic | A plain function is simpler |
+
+### 5. Practice Checks
+* **Passed:** two components each calling `useToggle()` have independent state (logic is shared, state is not).
+* **Revisit in the mini project:** write `useLocalStorage` from memory. Common slips: use `initialValue` (the real parameter), lazy init that READS `localStorage`, an effect that WRITES it, `JSON.parse` / `JSON.stringify`, and return the real `setValue`.
+
+### 6. Optional / Later (not needed now)
+* `renderHook` from React Testing Library to test hooks (Topic 12).
+* Hooks taking callbacks should keep the latest callback in a ref to avoid stale closures.
+* `localStorage` doesn't exist on the server (guard in Next.js, Phase 5).
+
+---
