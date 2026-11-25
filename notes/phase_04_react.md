@@ -448,3 +448,72 @@ function useAuth() {
 * `useReducer` + context is a built-in Redux-like pattern.
 
 ---
+
+# Topic 8: Advanced Hooks & React 19 (`useTransition`, `useOptimistic`, `useActionState`, `use`)
+
+> **Note:** These shine most with a framework (Next.js Server Actions, Phase 5). In a plain client app, TanStack Query covers most data work. Learn the idea and the use case now.
+
+### 1. Simple Definitions
+* **Transition:** Marks a state update as non-urgent so React can interrupt it and keep the UI responsive.
+* **Action:** An async function used for a form or mutation.
+* **Optimistic update:** Show the expected result immediately; revert if it fails.
+* **Suspense:** Shows a fallback (spinner) while something inside is still waiting.
+
+### 2. The Essentials
+1. **`useTransition`:** `const [isPending, startTransition] = useTransition();` Typing stays urgent (`setText`), the heavy list update goes in `startTransition(() => setQuery(...))`. It keeps the UI responsive; it does NOT make code faster.
+2. **`useDeferredValue(value)`:** a lagging copy of a value. Helps render cost, not network requests (not a debounce).
+3. **`useActionState(action, initialState)`** returns `[state, formAction, isPending]`. Use with `<form action={formAction}>`; the action gets `(prevState, formData)`.
+4. **`useOptimistic(state, updateFn)`:** temporary value while an action runs; reverts when the action ends. Must run inside an action or transition.
+5. **`use(promise | context)`:** suspends until the promise resolves (needs `<Suspense>` above). Can be called conditionally. The promise must be stable (from a cache, library, parent, or Server Component).
+6. **`useFormStatus()`** (`react-dom`): a button inside a form reads the form's pending state.
+
+### 3. Code Example
+```jsx
+// useActionState
+async function save(prev, formData) {
+  const name = formData.get("name");
+  if (!name) return { error: "Name is required" };
+  await api.save(name);
+  return { error: null };
+}
+function Form() {
+  const [state, formAction, isPending] = useActionState(save, { error: null });
+  return (
+    <form action={formAction}>
+      <input name="name" />
+      <button disabled={isPending}>Save</button>
+      {state.error && <p>{state.error}</p>}
+    </form>
+  );
+}
+```
+
+### 4. Which Hook?
+| Need | Use |
+|---|---|
+| Smooth typing while a heavy list re-renders | `useTransition` / `useDeferredValue` |
+| Form with validation errors + pending | `useActionState` |
+| Show result instantly, confirm later (likes, todos) | `useOptimistic` |
+| Wait for a promise (usually from a framework) | `use` + `<Suspense>` |
+| Submit button aware of pending form | `useFormStatus` |
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `use(fetch(...))` in a client component's render | New promise every render, so suspend, resolve, re-render, new promise: infinite loop (also a side effect in render) |
+| Expecting `useTransition` to speed up slow code | It only keeps the UI responsive |
+| Wrapping the controlled input's own `setState` in a transition | Input feels laggy; only the heavy part is non-urgent |
+| `useOptimistic` outside an action/transition | No revert; React warns |
+| `useDeferredValue` to debounce API calls | Defers rendering, not requests |
+| No `<Suspense>` above `use(promise)` | Nothing to show while waiting |
+
+### 6. Practice Checks
+* **Passed:** typing + heavy list = `useTransition`; instant Like = `useOptimistic`; form errors + pending = `useActionState`.
+* **Explained, revisit in Next.js:** `use(fetch().then(...))` in render loops because a new promise is created every render (purity + new reference). The promise must be created once and passed in.
+
+### 7. Optional / Later (not needed now)
+* Streaming Server Components with Suspense (Phase 5).
+* `useId`, `useSyncExternalStore`, `useInsertionEffect` (mostly for library authors).
+* After an `await` inside a transition, later state updates need their own `startTransition` (check the React 19 docs when needed).
+
+---
