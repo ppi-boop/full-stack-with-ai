@@ -600,3 +600,74 @@ function useLocalStorage(key, initialValue) {
 * `localStorage` doesn't exist on the server (guard in Next.js, Phase 5).
 
 ---
+
+# Topic 10: Forms & Validation (Controlled vs Uncontrolled, React Hook Form / Zod)
+
+### 1. Simple Definitions
+* **Controlled input:** React state is the source of truth (`value` + `onChange`).
+* **Uncontrolled input:** The DOM holds the value; read it via a `ref` or `FormData` on submit.
+* **Schema (Zod):** One description of valid data, used for validation and TypeScript types.
+* **React Hook Form (RHF):** Form library using mostly uncontrolled inputs (`register`), so typing causes few re-renders.
+
+### 2. The Essentials
+1. **Controlled** for live behaviour (counter, formatting, validate-as-you-type, dependent UI). **Uncontrolled** for simple submit-only forms (`defaultValue` + `FormData`).
+2. `e.preventDefault()` on `onSubmit` (or use `<form action={fn}>` in React 19).
+3. Gotchas: `value` without `onChange` = frozen input; start controlled state as `""` not `undefined`; checkbox uses `checked`; `type="number"` still gives a string.
+4. **Validation layers:** HTML built-in (UX hints), client-side (Zod/RHF, good UX), **server-side (the real protection, never trust the client)**.
+5. Show errors on blur or after first submit, not on the first keystroke.
+6. Zod: `z.object({...})`, `z.infer<typeof schema>` for the type, `schema.safeParse(input)` returns `{ success, data | error }` without throwing.
+7. RHF + Zod: `useForm({ resolver: zodResolver(schema) })`, `register("field")`, `handleSubmit(onSubmit)`, `formState: { errors, isSubmitting }`.
+8. Accessibility: `<label htmlFor>`, `aria-invalid`, errors in `role="alert"`, disable the button while submitting.
+
+### 3. Code Example
+```tsx
+const schema = z.object({
+  email: z.string().email("Enter a valid email"),
+  password: z.string().min(8, "At least 8 characters"),
+});
+type FormValues = z.infer<typeof schema>;
+
+function SignupForm() {
+  const { register, handleSubmit, formState: { errors, isSubmitting } } =
+    useForm<FormValues>({ resolver: zodResolver(schema) });
+
+  return (
+    <form onSubmit={handleSubmit(async v => { await api.signup(v); })} noValidate>
+      <label htmlFor="email">Email</label>
+      <input id="email" type="email" {...register("email")} aria-invalid={!!errors.email} />
+      {errors.email && <p role="alert">{errors.email.message}</p>}
+      {/* password field the same way */}
+      <button disabled={isSubmitting}>Sign up</button>
+    </form>
+  );
+}
+```
+
+### 4. When to Use Which
+| Situation | Choice |
+|---|---|
+| 1-2 simple fields | Plain controlled/uncontrolled inputs |
+| Real form: validation, many fields, TypeScript | RHF + Zod |
+| Next.js with Server Actions (Phase 5) | `<form action>` + `useActionState` + server-side Zod |
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `<input value={name} />` with no `onChange` | Frozen, read-only input |
+| Forgetting `e.preventDefault()` | Page reloads on submit |
+| `undefined` initial state for a controlled input | Uncontrolled to controlled warning |
+| Client-only validation | Trivially bypassed (DOM edit, `curl`) |
+| Errors on first keystroke | Annoying UX |
+| No label / `aria-invalid` / `role="alert"` | Inaccessible |
+| Allowing double submits | Disable the button while pending |
+
+### 6. Practice Checks (passed)
+* `<input value={name} />` is frozen because `value` forces state and nothing changes it. Fixes: add `onChange={e => setName(e.target.value)}` (controlled), or use `defaultValue` instead of `value` (uncontrolled).
+* The server must validate again because anyone can edit the DOM or skip the browser (`curl`, Postman); frontend validation is only UX.
+
+### 7. Optional / Later (not needed now)
+* Zod's API changes between major versions (e.g. `z.email()` in newer versions); check the docs for your version.
+* `useFieldArray` for dynamic fields; multi-step wizard forms.
+* Mapping server errors onto fields ("email already taken").
+
+---
