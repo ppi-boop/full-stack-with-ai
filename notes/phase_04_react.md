@@ -385,3 +385,66 @@ function SearchBox() {
 * List virtualization (`react-window`) beats memoizing for thousands of rows.
 
 ---
+
+# Topic 7: Context API & Prop Drilling vs State Management
+
+### 1. Simple Definitions
+* **Prop drilling:** Passing a prop through components that don't use it, just to reach a deep child.
+* **Context:** Shares a value with a whole subtree without passing props by hand (a notice board any descendant can read).
+* **Provider / Consumer:** The Provider puts a value on the board; any component reading it with `useContext` is a consumer.
+
+### 2. The Essentials
+1. Three parts: `createContext(default)`, `<Ctx.Provider value={...}>`, `useContext(Ctx)`. React 19: `<Ctx value={...}>` and `use(Ctx)`.
+2. **A changed context `value` re-renders EVERY consumer** (re-render trigger #3), even if it only reads part of the value.
+3. **Reference trap:** `value={{ user, setUser }}` is a new object each render, so all consumers re-render. Fix: `useMemo(() => ({ user, setUser }), [user])` (`setUser` is stable).
+4. Use context for **low-frequency, app-wide** values: theme, auth user, locale. NOT for fast-changing data (input text, mouse position).
+5. Wrap in a custom hook that throws if the Provider is missing (`useAuth()`), instead of silently getting the default.
+6. **Composition first:** if only one deep child needs data, create it high up and pass it as a prop/`children`. No context needed.
+7. Context only *delivers* a value; the state still lives in `useState`/`useReducer` above.
+
+### 3. Code Example
+```jsx
+const AuthContext = createContext(null);
+
+function AuthProvider({ children }) {            // children keeps its reference
+  const [user, setUser] = useState(null);
+  const value = useMemo(() => ({ user, setUser }), [user]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (ctx === null) throw new Error("useAuth must be used inside <AuthProvider>");
+  return ctx;
+}
+```
+
+### 4. Decision Guide
+| Situation | Use |
+|---|---|
+| Drilling 1-2 levels | Just pass props |
+| Intermediate components don't need the data | Composition (`children`) |
+| Rarely-changing value needed all over (theme, auth) | Context |
+| Complex client state with many actions | Zustand / Redux Toolkit |
+| Server data (lists, cache, refetch) | TanStack Query, NOT context |
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Inline `value={{ a, b }}` | New object each render, every consumer re-renders |
+| Fast-changing data in context | Re-renders all consumers on every change |
+| One giant context | Any change re-renders every consumer; split it |
+| Context for server data | Rebuilds caching/refetch by hand |
+| `useContext` outside Provider | Silently gets the default; throw in a custom hook |
+| Context at the first sign of drilling | Composition or plain props is often simpler |
+
+### 6. Practice Checks (passed)
+* Drilling `user` to `UserBadge`: context or a store; composition (pass `<UserBadge user={user} />` down) is the simplest for a single deep consumer.
+* Typing in an input beside a Provider with `value={{ theme, setTheme }}`: consumers re-render because `App` re-renders (trigger 2) AND the value is a new object (trigger 3). Best fix: move the input state into its own component (so `App` stops re-rendering). `useMemo` on the Provider's `value` (not on consumers) helps when the Provider is its own `{ children }` component. Memoizing `value` alone doesn't stop re-renders caused by the parent re-rendering.
+
+### 7. Optional / Later (not needed now)
+* `use(Context)` (React 19) can be called conditionally.
+* Selector-based stores (Zustand) let components subscribe to only part of the state.
+* `useReducer` + context is a built-in Redux-like pattern.
+
+---
