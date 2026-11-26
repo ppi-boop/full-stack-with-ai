@@ -7,9 +7,9 @@
 ## 📍 Current Status
 
 * **Current Active Phase:** **Phase 5 — Next.js App Router & Vercel AI SDK** (Project 1: Admin Dashboard)
-* **Current Progress:** **Phase 4 complete (12/12): Topics 1-10 studied with practice checks; Topics 11 and 12 overview only**
-* **Last Completed Topic:** **Phase 4, Topic 12: React Testing (overview only)**
-* **Next Topic to Resume:** ➡️ **Phase 5, Topic 1** (start of Next.js App Router). The optional warm-up (rewriting `useLocalStorage` / `useDebounce` from memory) was skipped by choice; reference code is in the Phase 4 Topic 9 notes.
+* **Current Progress:** **Phase 5 in progress — Topic 1 complete (1/10). Phase 4 complete (12/12; Topics 11-12 overview only)**
+* **Last Completed Topic:** **Phase 5, Topic 1: Setup, Project Structure & Routing**
+* **Next Topic to Resume:** ➡️ **Phase 5, Topic 2: Server Components vs Client Components**. (Optional warm-up of rewriting `useLocalStorage` / `useDebounce` from memory was skipped by choice; reference code is in the Phase 4 Topic 9 notes.) Recheck in Project 1: only `(parentheses)` folders vanish from the URL.
 * **Weak spots to revisit:** (1) "Stale snapshot / closures" improved: predicted the stale `useCallback` correctly in Topic 6. (2) "A new reference every render defeats `React.memo`" was not solved in Topic 6 (V1). Seen again in Topic 7 (C2): fixed by moving state down; and Topic 8 (A2: `use(fetch())` in render, not self-solved, same root cause: side effect + new reference in render). Recheck in the mini React project.
 * **Planned:** The standalone mini React project was skipped. Fold it into **Project 1 (Admin Dashboard)** in Phase 5: practise hooks, memoization, forms (RHF + Zod), composition, error boundaries and testing (RTL + Vitest) there.
 * **Teaching Persona Active:** Direct and honest teacher, but practical (changed at Phase 4 Topic 2). Explain in simple language first, then only the essentials: a short definition, one code example, common mistakes, and 2 practice questions per topic (about 30-45 min). Deep internals go in an optional "Later" section, not the main lesson. Target: finish Phase 4 in 2-3 weeks and start a small real React project around Topic 6-7.
@@ -21,7 +21,7 @@
 When you open Antigravity / your AI assistant at home or office, simply paste this one sentence:
 
 ```text
-Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 4 React Core is complete (Topics 11 and 12 were overview only). We are starting Phase 5 Next.js App Router & Vercel AI SDK, then Project 1 Admin Dashboard. Use the practical teacher persona (essentials only, 2 practice questions per topic).
+Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 4 React Core is complete (Topics 11 and 12 were overview only). We are in Phase 5 Next.js App Router & Vercel AI SDK (Topic 1 Routing done; next Topic 2 Server vs Client Components), then Project 1 Admin Dashboard. Use the practical teacher persona (essentials only, 2 practice questions per topic).
 ```
 
 ---
@@ -97,7 +97,18 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 
   - [x] **Topic 12:** React Testing (React Testing Library & Vitest/Jest) *(overview only; practise in Project 1 and Phase 14)*
 
 ### Tier 2: Beginner to Solid (Next.js & Backend)
-- [ ] **Phase 5: Next.js App Router & Vercel AI SDK** *(Project 1: Admin Dashboard)*
+- [ ] **Phase 5: Next.js App Router & Vercel AI SDK** *(In Progress; Project 1: Admin Dashboard at the end)*
+  - [x] **Topic 1:** Setup, Project Structure & Routing (pages, layouts, dynamic routes, navigation, loading)
+  - [ ] **Topic 2:** Server Components vs Client Components *(NEXT)*
+  - [ ] **Topic 3:** Rendering Modes (static, dynamic, streaming) & Data Fetching / Caching
+  - [ ] **Topic 4:** Server Actions, Forms & Mutations
+  - [ ] **Topic 5:** Route Handlers & When to Use a Separate Backend
+  - [ ] **Topic 6:** Authentication & Protected Pages
+  - [ ] **Topic 7:** Error Handling, `not-found`, Env Variables, Metadata/SEO, Image Optimization *(quick)*
+  - [ ] **Topic 8:** URL State: Pagination, Search & Filters with Query Params
+  - [ ] **Topic 9:** Deployment & Troubleshooting *(quick)*
+  - [ ] **Topic 10:** Vercel AI SDK & Streaming UI
+  - [ ] **Project 1:** Admin Dashboard (practise Phase 4 weak spots, forms, memoization, testing)
 - [ ] **Phase 6: Node.js, Express, Auth, RBAC & API Architecture** *(Project 2: Order API)*
 - [ ] **Phase 7: PostgreSQL & MongoDB Architecture**
 
@@ -125,3 +136,5 @@ Please check PROGRESS_TRACKER.md and continue teaching where we left off. Phase 
   * Markdown: [notes/phase_03_css.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_03_css.md)
 * 📄 **Phase 4 (React Core & Reconciliation — 12 Topics Complete; 11 and 12 overview only):**
   * Markdown: [notes/phase_04_react.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_04_react.md)
+* 📄 **Phase 5 (Next.js App Router & Vercel AI SDK — In Progress):**
+  * Markdown: [notes/phase_05_nextjs.md](file:///Users/tagline/Documents/fullstack-ai-roadmap/notes/phase_05_nextjs.md)
