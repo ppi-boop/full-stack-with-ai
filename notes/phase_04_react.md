@@ -716,3 +716,62 @@ function SignupForm() {
 * Barrel files (`index.ts` re-exports) can hurt tree-shaking.
 
 ---
+
+# Topic 12: React Testing (React Testing Library + Vitest) — overview only
+
+> **Status:** Overview only, not practised. Real testing practice comes in **Project 1 (Admin Dashboard)** and **Phase 14**.
+
+### 1. What It's For
+* Tests give you confidence to refactor and ship without breaking things. They appear in most job descriptions and in Project 1's requirements.
+* **Vitest** = test runner (Jest-compatible, Vite-native). **React Testing Library (RTL)** = renders components and finds things like a user would. **jsdom** = fake browser in Node. **`@testing-library/user-event`** = simulates real typing/clicking. **`@testing-library/jest-dom`** = matchers like `toBeInTheDocument()`.
+
+### 2. Key Ideas
+1. **Test what the user sees, not implementation.** Click, type, then check the screen. Never assert on internal state.
+2. **Arrange, Act, Assert.** `render(...)`, then `await user.click(...)`, then `expect(...)`. Always `await` user-event.
+3. **Query priority:** `getByRole` (best, also checks accessibility) > `getByLabelText` > `getByText` > `getByTestId` (last resort). Proper labels/roles make code easier to test.
+4. **Query families:** `getBy` throws if missing; `queryBy` returns `null` (use to assert something is NOT there); `findBy` waits (async content).
+5. **Mock** network calls (`vi.spyOn(globalThis, "fetch")`, or MSW for realistic mocks). Reset mocks between tests.
+6. **Custom hooks:** `renderHook` + `act`.
+7. Don't test internals, library code, or use big snapshots. Coverage % is only a rough signal.
+
+### 3. Code Example
+```tsx
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect } from "vitest";
+
+describe("Counter", () => {
+  it("increments when the button is clicked", async () => {
+    const user = userEvent.setup();
+    render(<Counter />);                                             // Arrange
+    await user.click(screen.getByRole("button", { name: "Add" }));   // Act
+    expect(screen.getByText("Count: 1")).toBeInTheDocument();        // Assert
+  });
+});
+```
+Setup (Vite): `npm i -D vitest jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom`; in `vite.config.ts` set `test: { environment: "jsdom", globals: true, setupFiles: "./src/setupTests.ts" }`; in `setupTests.ts` add `import "@testing-library/jest-dom/vitest"`.
+
+### 4. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| `getByText(...)` to assert absence | `getBy` throws when missing; use `queryBy...` + `.not.toBeInTheDocument()` |
+| Not awaiting `user.click` / `findBy` | Assertion runs too early, flaky test |
+| `getBy` for async content | Fails immediately; use `await findBy` |
+| Querying by class / CSS | Breaks on styling changes |
+| Asserting on internal state | Breaks on harmless refactors |
+| Mocks leaking between tests | Order-dependent failures |
+
+### 5. Practice Checks
+* Not attempted (decided overview-only). Revisit in Project 1 / Phase 14: write tests for `useDebounce`, a form with validation errors, and a data-loading component.
+
+### 6. Optional / Later
+* MSW for network mocking, fake timers for debounce tests, Playwright E2E (Phase 14), `jest-axe` accessibility checks, wrapping consumers in Providers for context tests.
+
+---
+
+# Phase 4 Complete
+
+All 12 topics covered. **Topics 1-10 studied with practice checks; Topics 11 and 12 are overview only.**
+Weak spots to keep practising: stale closures, and "new reference every render defeats `memo`/`use`/effect deps".
+
+---
