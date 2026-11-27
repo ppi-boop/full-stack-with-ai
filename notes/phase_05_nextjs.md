@@ -370,3 +370,103 @@ export async function deleteOrder(formData: FormData) {
 * Passing Server Actions as props.
 
 ---
+
+# Topic 5: Route Handlers & When to Use a Separate Backend
+
+### 1. Real-Time Example: Razorpay tells your server "payment done"
+```text
+ CUSTOMER           RAZORPAY (another company's server)      YOUR SERVER (Next.js)
+ 1. Clicks Pay on /checkout
+ 2. Pays on Razorpay's page ──▶ 3. Payment succeeds
+                                4. Razorpay calls your URL:
+                                   POST myshop.com/api/webhooks/razorpay  ──▶  5. route.ts runs:
+                                   (JSON body + signature header)                 a. Is the signature genuine?
+                                                                                  b. Mark the order "paid" in the DB
+                                                                                  c. revalidateTag("orders", "max")
+                                6. Razorpay gets 200 OK  ◀────────────────────  quick 200 response
+ 7. Admin dashboard shows "Paid"
+```
+* Why not a Server Action? A Server Action is for **your own app's forms**; Next.js generates its address internally. An outsider needs a **plain, fixed URL**.
+* Analogy: Server Action = intercom inside the house (only your own form uses it). Route Handler = gate with an address (Razorpay, a mobile app or any server can come); so the gate needs a **guard**.
+
+### 2. Simple Definitions
+* **Route Handler:** a `route.ts` file exporting `GET`, `POST`, `PUT`, `PATCH`, `DELETE` functions using the standard web `Request`/`Response`.
+* **Webhook:** another service calls your URL with a POST saying "something happened".
+* **Idempotent:** doing the same thing once or five times gives the same result. Lift button = idempotent; "one more tea" = not.
+* **Signature:** a stamp made with a shared secret; proves the message came from the real sender.
+
+### 3. The Essentials
+1. The folder makes the URL (`app/api/orders/route.ts` is `/api/orders`). `page.tsx` and `route.ts` cannot live in the same folder.
+2. **Use a Route Handler for:** webhooks (Stripe, Razorpay), endpoints for non-React clients (mobile app), file download/streaming, OAuth callbacks, a proxy that hides a third-party API key.
+3. **Do NOT use one for:** data for your own Server Components (call the function directly) or your own form mutations (Server Action).
+4. **Treat every handler as a public API:** authenticate, authorize, validate input, return correct status codes (200, 201, 400, 401, 403, 404, 500).
+5. **Webhook rules:** (1) verify the **signature first** (webhooks have no logged-in user or cookie, so a "user check" is the wrong tool); (2) return 200 quickly (slow = provider retries); (3) keep the handler **idempotent** (events can arrive twice).
+6. `updateTag` works only in Server Actions. In a Route Handler use `revalidateTag("orders", "max")`.
+7. `params` in dynamic route handlers is also a Promise: `await` it.
+
+### 4. Code Example
+```ts
+// app/api/webhooks/razorpay/route.ts
+import crypto from "node:crypto";
+import { revalidateTag } from "next/cache";
+
+export async function POST(req: Request) {
+  const body = await req.text();                              // signature is made on the raw text
+  const signature = req.headers.get("x-razorpay-signature");
+  const expected = crypto
+    .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!)   // secret in .env, never NEXT_PUBLIC_
+    .update(body)
+    .digest("hex");
+
+  if (!signature || signature !== expected) {
+    return new Response("Invalid signature", { status: 401 });    // guard first
+  }
+
+  const event = JSON.parse(body);
+  if (event.event === "payment.captured") {
+    await markOrderPaid(event.payload.payment.entity.order_id);   // must be idempotent
+    revalidateTag("orders", "max");
+  }
+  return Response.json({ ok: true });                             // quick 200
+}
+```
+> Razorpay's exact header/field names are from memory here; check their docs in a real project. In production compare signatures with `crypto.timingSafeEqual`.
+
+### 5. When to Use What
+| Situation | Use |
+|---|---|
+| Add/edit/delete from your own page | **Server Action** |
+| Show data on your own page | **Server Component** calling the function directly |
+| Razorpay/Stripe webhook | **Route Handler** |
+| Mobile app needs an API | **Route Handler** (or a separate backend) |
+| File download / stream | **Route Handler** |
+| Hide a third-party API key | **Route Handler** proxy (or call it from a Server Component) |
+
+**Read vs write rule:** a Server Component function call runs **while the page renders** and is for **reading**. A Server Action runs **when the user does something** (click, submit) and is for **changing** data. Putting a delete inside a Server Component would delete on page open or refresh.
+
+### 6. Separate Backend? (my judgement, not from the roadmap; the roadmap only points to Phase 6)
+* **Next.js alone is enough:** one web app, mostly CRUD, small team. Project 1 is like this.
+* **Consider Express/FastAPI when:** web + mobile + partners share one API; long-running work (jobs, queues, cron, big AI pipelines; serverless has time limits); Python work (RAG, LangGraph, so the AI projects use FastAPI); separate team or scaling needs.
+* Then Next.js just talks to that backend like any other frontend (Projects 2 and 4).
+
+### 7. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| No signature check on a webhook | Anyone can fake "payment done" |
+| Fetching your own `/api/...` from your own Server Component | Pointless network hop; call the function |
+| No auth on a Route Handler | It is a public API |
+| Slow webhook handler | Provider times out and retries |
+| Non-idempotent webhook (`balance + 500`) | A retry applies it twice |
+| Secret in `NEXT_PUBLIC_` | Visible to every visitor |
+| Returning 200 even on errors | The caller never knows it failed |
+
+### 8. Practice Checks (passed)
+* **T1:** (b) page list = Server Component call, (c) Android app = Route Handler, (d) Razorpay = Route Handler, all correct. **(a) "Delete order" was first answered "Server Component call" (wrong)**; after the read-vs-write explanation: Server Action. **No one-line reasons written** (third time in a row: Topics 3, 4, 5).
+* **T2** (fake webhook): "the POST will succeed" is right; the order would be marked paid with no payment. Idea "check who sent it and from where" is right, but a webhook has no logged-in user: the check is the **signature** (HMAC with the shared secret). Right idea, wrong word ("user check"); the concept was correct.
+* Doubts asked and explained: Server Component call vs Server Action (read vs write, render time vs click time); idempotent (`status = "paid"` is safe on a retry, `balance + 500` is not; for "add" style work store the event id and skip repeats).
+
+### 9. Optional / Later (not needed now)
+* Caching a `GET` handler: call a `use cache` helper inside it (the directive can't go on the `GET` export).
+* CSRF when a POST handler uses cookie auth (Phase 14); streaming responses; CORS headers.
+
+---
