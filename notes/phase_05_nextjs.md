@@ -256,3 +256,117 @@ const [p, c] = await Promise.all([getProducts(), getCategories()]); // both toge
 * Partial Prerendering internals, migrating an old app to Cache Components.
 
 ---
+
+# Topic 4: Server Actions, Forms & Mutations
+
+### 1. Real-Time Example: "Add new order" in the admin dashboard
+```text
+ ADMIN (browser)                               SERVER (Next.js)
+ 1. Opens /orders: sees 5 orders (cached, tag "orders")
+ 2. Fills the form: "Pen", qty 3
+ 3. Clicks Save  ─────────────────────────▶  4. createOrder() runs on the server:
+    (Next.js sends the POST itself)             a. Who is logged in? Is it an admin?
+                                                b. Is the data valid? (Zod)
+                                                c. Save to the database
+                                                d. updateTag("orders"): expire the cached list
+                                                e. redirect("/orders")
+ 6. Page shows 6 orders  ◀──────────────────  5. Fresh list comes back
+```
+* Analogy: the form is an **order slip** going from the table to the kitchen counter. The counter must check who sent it and whether they may order that, before cooking.
+* No separate `/api/orders` route, no hand-written `fetch`, no manual loading state: Next.js does the plumbing.
+
+### 2. Simple Definitions
+* **Server Function:** async function that runs on the server and is called from the client over the network (always POST).
+* **Server Action:** a Server Function used as a form `action` or for a mutation.
+* **Mutation:** changing data (add, edit, delete), as opposed to reading it.
+* **`"use server"`:** marker saying the function runs only on the server.
+
+### 3. The Essentials
+1. `"use server"` at the top of a function or a file. Inline functions only inside Server Components; a Client Component must import the action from a `"use server"` file.
+2. Form flow: `<form action={createOrder}>` receives `FormData`. On the server do **auth check, validate (Zod), save, refresh**.
+3. **Security: a Server Action is a public POST endpoint.** Hiding the button is not protection. Inside every action check: authentication (is someone logged in?), authorization (may this user do this, and does this user own THIS record?), and validate all input.
+4. Refreshing the cache after a mutation:
+   * `updateTag("orders")`: Server Actions only; the user sees fresh data immediately (read-your-own-writes). Use when the user just changed the data themselves.
+   * `revalidateTag("orders", "max")`: stale-while-revalidate; old data may show once, then updates in the background. The 2nd argument is now required. Use when slightly old data is fine.
+   * `revalidatePath("/orders")`: refresh a whole route.
+5. **Revalidate first, `redirect` last.** `redirect()` throws, so code after it never runs.
+6. UI: `useActionState(action, initial)` gives `[state, formAction, pending]` for validation errors and "Saving..."; `useOptimistic` for instant feedback (Phase 4 Topic 8).
+7. Don't use Server Actions to read data (the client runs them one at a time). Reads belong in Server Components.
+
+### 4. Code Example
+```ts
+// app/orders/actions.ts
+"use server";
+import { z } from "zod";
+import { updateTag } from "next/cache";
+import { redirect } from "next/navigation";
+import { requireRole } from "@/lib/dal";
+
+const Schema = z.object({
+  name: z.string().min(2),
+  qty: z.coerce.number().int().min(1),     // form values are always strings
+});
+
+export async function createOrder(prev: unknown, formData: FormData) {
+  await requireRole("admin");                                      // auth inside the function
+  const parsed = Schema.safeParse(Object.fromEntries(formData));  // validate
+  if (!parsed.success) return { errors: parsed.error.flatten().fieldErrors };
+  await db.orders.create(parsed.data);                             // save
+  updateTag("orders");                                             // refresh first
+  redirect("/orders");                                             // redirect last
+}
+```
+```tsx
+// app/orders/OrderForm.tsx
+"use client";
+import { useActionState } from "react";
+import { createOrder } from "./actions";
+
+export function OrderForm() {
+  const [state, formAction, pending] = useActionState(createOrder, null);
+  return (
+    <form action={formAction}>
+      <input name="name" />
+      <input name="qty" type="number" />
+      {state?.errors?.qty && <p>{state.errors.qty[0]}</p>}
+      <button disabled={pending}>{pending ? "Saving..." : "Save"}</button>
+    </form>
+  );
+}
+```
+`createOrder` takes `(prev, formData)` because `useActionState` passes the previous state as the first argument.
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Hiding the button and assuming the action is safe | The action is a public endpoint; anyone can POST to it directly |
+| Using a client-sent `id` without checking ownership | IDOR: one user deletes another user's order |
+| Trusting only frontend validation | Frontend checks can be removed in DevTools |
+| Forgetting `updateTag`/`revalidate` | Data saved, but the list looks stale |
+| `revalidatePath` after `redirect` | `redirect` throws; it never runs |
+| Returning raw error objects | Leaks internal details |
+| Inline `"use server"` in a Client Component | Only Server Components can define inline actions |
+
+### 6. Practice Checks (passed)
+* **S1:** (a) own new order must show immediately = `updateTag`; (b) slightly old view count is fine = `revalidateTag("x", "max")`. Both correct. **No one-line reasons written** (this is the second time; practise giving a "why", interviews ask for it).
+* **S2** (bug-hunt on `deleteOrder`): found 3 of 4: missing login check, missing permission check, and `revalidatePath` must come before `redirect`. **Missed:** the `id` from `formData.get("id")` is unvalidated input (it can be `null`, a `File`, or someone else's id). Fix: validate with Zod, and check that this order belongs to this user.
+* Vocabulary to use in interviews: "is logged in?" = **authentication**; "is allowed to do this / owns this record?" = **authorization**.
+```ts
+"use server";
+export async function deleteOrder(formData: FormData) {
+  const user = await requireUser();                                  // authentication
+  const { id } = z.object({ id: z.string().uuid() }).parse(Object.fromEntries(formData)); // validate
+  const order = await db.orders.findById(id);
+  if (!order || order.ownerId !== user.id) throw new Error("Not allowed");   // authorization
+  await db.orders.delete(id);
+  updateTag("orders");
+  redirect("/orders");
+}
+```
+
+### 7. Optional / Later (not needed now)
+* Progressive enhancement (Server Component forms work before JS loads).
+* `refresh()`, `useFormStatus` for nested submit buttons, file uploads.
+* Passing Server Actions as props.
+
+---
