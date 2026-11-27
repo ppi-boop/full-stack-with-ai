@@ -167,3 +167,92 @@ export function LikeButton({ productId }: { productId: string }) {
 * How the RSC payload works under the hood.
 
 ---
+
+# Topic 3: Rendering Modes & Data Fetching / Caching
+
+### 1. Real-Time Example: `myshop.com/products`
+```text
++---------------------------------------------+
+| Products (heading)          <- same for everyone, never changes      -> STATIC
+| List of 20 products         <- changes a few times a day             -> CACHED (1 hour)
+| "Your cart has 2 items"     <- different per user, comes from cookie -> DYNAMIC
++---------------------------------------------+
+```
+1. **Before deploy (build time):** Next.js builds the HTML for everything that can be known in advance. This is the **static shell**.
+2. **User opens the page:** the shell arrives immediately (heading + products). The page is never blank.
+3. **Then, at request time:** the server reads the cookie, finds the cart count, and that part is **streamed** in afterwards.
+* Analogy: printed menu (static), today's special on the whiteboard (cached, changes once a day), "is a table free right now?" (dynamic, ask the kitchen every time).
+
+### 2. Simple Definitions
+* **Static:** HTML built once, everyone gets the same.
+* **Dynamic:** built on every request (depends on the user or on time).
+* **Streaming:** send the ready parts first, the rest later.
+* **Cache:** remember an old result instead of rebuilding it.
+* **Suspense:** "this part isn't ready yet, show this fallback meanwhile."
+
+### 3. The Essentials (Next.js 16, Cache Components)
+1. Next.js prerenders everything it can at build time. Anything that cannot be known at build time must sit inside `<Suspense>`.
+2. These make a part dynamic: `cookies()`, `headers()`, `searchParams`, uncached `fetch`, DB queries, `Math.random()`, `Date.now()`.
+3. **`fetch` is NOT cached by default in Next.js 16.** Old tutorials (Next 13/14) say it is. That is the old model.
+4. **Cache on purpose with `"use cache"`:** `cacheLife("hours")` sets how long the data stays valid; `cacheTag("products")` names it so it can be refreshed later. Needs `cacheComponents: true` (`create-next-app` turns it on by default; confirmed in the roadmap).
+5. The same `fetch` called twice in one render runs once (deduplicated). For DB/ORM calls use `React.cache`.
+6. **Parallel fetching:** independent data goes in `Promise.all`. Sequential `await`s create a waterfall (2 x 1 sec = 2 sec instead of 1 sec).
+7. Cache key = the function's arguments. Never put one user's private data in a shared `use cache` function; pass the user id as an argument, or use `use cache: private`.
+
+### 4. Code Example
+```tsx
+// lib/products.ts
+import { cacheLife, cacheTag } from "next/cache";
+
+export async function getProducts() {
+  "use cache";
+  cacheLife("hours");          // same data for 1 hour
+  cacheTag("products");        // refresh later using this name
+  const res = await fetch("https://dummyjson.com/products?limit=20");
+  if (!res.ok) throw new Error("Failed to load products");
+  return res.json();
+}
+```
+```tsx
+// app/products/page.tsx
+export default async function ProductsPage() {
+  const { products } = await getProducts();        // cached, part of the static shell
+  return (
+    <>
+      <h1>Products</h1>                             {/* static */}
+      <ProductList products={products} />           {/* cached 1 hour */}
+      <Suspense fallback={<p>Loading cart...</p>}>
+        <CartCount />                                {/* dynamic: reads cookies() */}
+      </Suspense>
+    </>
+  );
+}
+
+// Waterfall (slow) vs parallel (fast)
+const products = await getProducts();
+const categories = await getCategories();                         // waits for the first one
+const [p, c] = await Promise.all([getProducts(), getCategories()]); // both together
+```
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Assuming `fetch` is cached because a 2023 article said so | Next.js 16 default is uncached |
+| `cookies()` or a DB query outside `<Suspense>` | Blocking route: build error/warning |
+| User's private data inside a shared `use cache` function | One user's data can leak to another |
+| Sequential `await`s for independent data | Waterfall; page is slower than needed |
+| Making the whole page dynamic | Loses the static shell benefit |
+| Old config (`export const dynamic`, `revalidate`) with Cache Components on | Errors; replaced by `use cache` + `cacheLife` |
+
+> Cache Components is new. Turning it on in an existing app can surface new build errors (uncached data outside Suspense). Docs win if they disagree.
+
+### 6. Practice Checks (passed)
+* **R1** (Static / Cached / Dynamic): footer = static; blog list updated twice a day = cached; "Welcome back, Asha" = answered "Welcome back is static, Asha is dynamic", which is the more precise answer (the text is in the shell, the name streams in from the cookie); live stock count = dynamic. No one-line reasons were written (they were asked for); not a problem here but worth giving next time.
+* **R2** (two sequential `await`s = 2 sec): correctly named it a waterfall and said both calls are independent so they should run in parallel. Did not write the `Promise.all` code, but the concept is right.
+
+### 7. Optional / Later (not needed now)
+* `use cache: private` and `use cache: remote`; `unstable_cache` (still works).
+* `revalidateTag` vs `updateTag` (comes with Server Actions in Topic 4).
+* Partial Prerendering internals, migrating an old app to Cache Components.
+
+---
