@@ -470,3 +470,135 @@ export async function POST(req: Request) {
 * CSRF when a POST handler uses cookie auth (Phase 14); streaming responses; CORS headers.
 
 ---
+
+# Topic 6: Authentication & Protected Pages
+
+> Teaching note: the first, many-terms version of this lesson did not land ("nothing understood"). The version that worked was ONE idea at a time with a single analogy (water-park wristband), no code at first, then small checks.
+
+### 1. Real-Time Example: why a cookie exists
+HTTP has no memory. The server treats every request as a brand-new visitor.
+```text
+Request 1: POST /login (email + password)
+   Server -> "Correct!"  + response header:  Set-Cookie: session=<token>
+   The browser saves the cookie.
+
+Request 2: GET /orders
+   The browser sends it by itself:  Cookie: session=<token>   (on EVERY request to that site)
+   Server checks the token -> "this is an admin, stamp is genuine" -> returns the orders.
+```
+You can see `Set-Cookie` (response header) and `Cookie` (request header) in the Network tab.
+
+* Analogy: **water-park wristband.** Show your ID at the gate once (login) and get a band (cookie). At each ride only the band is checked. The band carries a **stamp (signature)** that only the park can make, so a fake band fails the check. A "VIP" mark on the band decides which rides you may enter (role).
+
+### 2. Simple Definitions
+| Word | Meaning | Water park |
+|---|---|---|
+| **Cookie** | small piece of data the browser saves and sends with every request | wristband |
+| **Authentication** | proving who you are | showing ID at the gate |
+| **Authorization** | what you are allowed to do / which records are yours | VIP ride permission |
+| **Session** | the server remembering you across requests (here: a signed token in a cookie) | the band itself |
+| **Signature** | a stamp made with a secret only the server has (`SESSION_SECRET` in `.env`) | the park's stamp |
+| **DAL** | one server-only module that does the real auth check and all data reads | ride operator next to the ride |
+| **DTO** | the small object you send out instead of a full DB row | |
+
+### 3. The Essentials
+1. Three separate jobs: **authentication** (who), **session management** (remember), **authorization** (allowed?).
+2. In real projects use a maintained library (Auth.js, Better Auth, Clerk, Supabase). Build it by hand once to learn. Password hashing, refresh tokens, RBAC come in Phase 6.
+3. **Session cookie flags:** `HttpOnly` (JavaScript cannot read it, so an XSS script cannot steal it), `Secure` (HTTPS only), `SameSite=Lax` (helps against CSRF). Set the cookie on the server. Sign the token with `jose`; secret in an env var; no personal info (PII) inside the token.
+4. **Why not `localStorage` for the token?** Any JavaScript running on the page (an XSS comment-box `<script>`, a compromised npm package) can do `localStorage.getItem("token")` and send it to a hacker. An `HttpOnly` cookie cannot be read by JavaScript at all.
+5. **DAL:** `lib/dal.ts` (`import "server-only"`) with `verifySession()` wrapped in `React.cache` (runs once per request). **Every data read, every Server Action and every Route Handler calls it.**
+6. **DTO:** never send a whole DB row (it can contain `passwordHash`); a Client Component's props travel to the browser (Topic 2). Return only the fields the UI needs.
+7. **`proxy.ts`** (was `middleware.ts`) is only an **optimistic gate guard**: "is there a cookie?" No DB calls, because it runs on every route and prefetch. A fake cookie passes it. It is **never** the only protection, and its `matcher` can miss routes (the example matcher even skips `/api`).
+8. **Real check goes next to the data**, not in a layout (Topic 1: layouts don't re-run on each navigation). Rule: wherever data comes out (page, Server Action, Route Handler) call `verifySession()` there.
+9. Under Cache Components the session is runtime data (`cookies()`), which has its own guide; not needed yet.
+
+### 4. Code Example
+```ts
+// proxy.ts  (Next.js 16; was middleware.ts)  --  OPTIMISTIC check only
+import { NextResponse, type NextRequest } from "next/server";
+
+export function proxy(req: NextRequest) {
+  const hasSession = req.cookies.has("session");
+  if (!hasSession && req.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+}
+export const config = { matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"] };
+```
+```ts
+// lib/dal.ts  (simplified): the REAL check
+import "server-only";
+import { cache } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { jwtVerify } from "jose";
+
+const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
+
+export const verifySession = cache(async () => {
+  const token = (await cookies()).get("session")?.value;   // Next 16: await cookies()
+  if (!token) redirect("/login");
+  try {
+    const { payload } = await jwtVerify(token, secret);    // signature + expiry
+    return { userId: payload.userId as string, role: payload.role as string };
+  } catch {
+    redirect("/login");                                     // fake or expired token
+  }
+});
+
+export async function requireRole(role: string) {
+  const session = await verifySession();
+  if (session.role !== role) redirect("/forbidden");
+  return session;
+}
+
+// DTO: only the fields the UI needs
+export async function getUserCard(id: string) {
+  await verifySession();
+  const user = await db.users.findById(id);        // full row stays on the server
+  return { id: user.id, name: user.name };
+}
+```
+```ts
+// in the login Server Action: set the cookie on the server
+(await cookies()).set("session", token, {
+  httpOnly: true, secure: true, sameSite: "lax", maxAge: 60 * 60 * 24 * 7, path: "/",
+});
+```
+```ts
+// app/api/export/route.ts: the check lives INSIDE the handler (proxy does not cover /api here)
+export async function GET() {
+  const session = await verifySession();
+  if (session.role !== "admin") return new Response("Forbidden", { status: 403 });
+  const csv = await buildOrdersCsv();
+  return new Response(csv, { headers: { "Content-Type": "text/csv" } });
+}
+```
+
+### 5. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| "Protected" page that only redirects on the client | The data has already reached the browser |
+| JWT in `localStorage` | XSS script can read and steal it |
+| Role checked only in the UI (hidden button) | The action is a public endpoint; a hacker edits the page JS or calls it directly |
+| Relying only on `proxy.ts` | It only checks that a cookie exists; a fake cookie passes |
+| Extending the proxy `matcher` instead of adding a check in the handler | Still only an optimistic check; the next new route can be missed |
+| DB call inside `proxy.ts` | Runs on every route and prefetch, so the site gets slow |
+| Sending a whole DB row to the client | `passwordHash` etc. leak |
+| Auth check only in `layout.tsx` | Layouts do not re-run on every navigation |
+| Cookie without `HttpOnly` | JavaScript can read it |
+
+### 6. Practice Checks (passed)
+* **Wristband checks:** "How does the server know request 2 is the same person?" = the browser sends the cookie with each request. Fake cookie = the server checks the stamp against its secret and rejects it. Both correct. Refinement: the cookie goes on every request, not only API calls.
+* **Matcher trap** (`/api/export` not covered by the proxy): correctly said anyone can open it. His fix was to make the proxy cover the route (change the matcher or move the folder). That is only the guard again, and a fake cookie still passes. **Correct fix:** `verifySession()` and a role check inside the Route Handler.
+* **XSS question:** token in `localStorage` gets stolen; an `HttpOnly` cookie does not. Correct.
+* **Final answer** (token in `localStorage` + button hidden only in the UI): problem 1 = a hacker can read `localStorage`, fix = `HttpOnly` cookie. Problem 2 = a hacker can remove the UI condition in browser JS. **Fix not stated:** check the role on the server, inside the Server Action / Route Handler (hiding a button is UX, not security). DTO: "only the data the frontend uses" = correct; add: sensitive fields like `passwordHash` never leave the server.
+* First time one-line reasons appeared in the answers; keep doing it.
+* Interview answers ready: "Why isn't proxy.ts enough?" (only checks cookie presence, not validity; matcher can miss routes; Actions/Handlers need their own checks). "Why HttpOnly cookies, not localStorage?" (JS cannot read them, so XSS cannot steal them). "DAL and DTO?" (see definitions).
+
+### 7. Optional / Later (not needed now)
+* Password hashing (bcrypt/argon2), refresh tokens, OAuth / social login, rate limiting (Phases 6 and 14).
+* "Authentication with Cache Components" guide; database sessions (cookie holds only an encrypted session id).
+* `SameSite` and CSRF in detail (Phase 14).
+
+---
