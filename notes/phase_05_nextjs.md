@@ -602,3 +602,81 @@ export async function GET() {
 * `SameSite` and CSRF in detail (Phase 14).
 
 ---
+
+# Topic 7: Error Handling, not-found, Env Variables, Metadata/SEO & Image Optimization (quick)
+
+### 1. Real-Time Example: five scenes on `myshop.com/products/42`
+**Scene 1: something breaks (error).** The DB is down while the page runs.
+* Without handling the page breaks. With `app/products/error.tsx` the same spot shows a friendly message and a "Try again" button.
+```tsx
+"use client";                                   // error.tsx is always a Client Component
+export default function Error({ reset }: { error: Error; reset: () => void }) {
+  return (<div><p>Something went wrong. Please try again.</p><button onClick={() => reset()}>Try again</button></div>);
+}
+```
+* It is the Next.js version of a React error boundary (Phase 4). `reset()` retries the segment. `global-error.tsx` handles root-layout errors.
+* **Expected errors** (validation, "email already taken") are **returned as state** from a Server Action (`useActionState`, Topic 4), not thrown. **Unexpected errors** (DB down, bug) are thrown and caught by `error.tsx`. Never show raw error messages to users; log details on the server.
+
+**Scene 2: product does not exist (not-found).** `/products/99999`:
+```tsx
+const product = await getProduct(id);
+if (!product) notFound();            // renders not-found.tsx with HTTP status 404
+```
+
+**Scene 3: where do secrets live (env variables).**
+```text
+.env.local        real secrets; never commit it
+.env.example      names only, no values; documentation for other developers
+DATABASE_URL=...            # server only
+STRIPE_SECRET_KEY=...       # server only
+NEXT_PUBLIC_SITE_NAME=...   # also shipped to the browser (public things only)
+```
+* Only names starting with `NEXT_PUBLIC_` are inlined into the browser bundle, **at build time**. So changing one needs a rebuild (interview question). Never put `NEXT_PUBLIC_` on a secret.
+* Validate env with Zod at startup so the app fails fast if one is missing.
+
+**Scene 4: how the link looks on WhatsApp/Google (metadata).**
+```tsx
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const product = await getProduct(id);
+  if (!product) return { title: "Product not found" };
+  return { title: `${product.name} | MyShop`, description: product.description };
+}
+```
+* Fixed title: `export const metadata = { title: "About", description: "..." }`. Per-page title lives in `page.tsx` or `layout.tsx` (interview question).
+
+**Scene 5: the product photo (image).**
+```tsx
+import Image from "next/image";
+<Image src={product.imageUrl} alt={product.name} width={600} height={400} priority />
+```
+```ts
+// next.config.ts: remote images must be allowed
+images: { remotePatterns: [{ protocol: "https", hostname: "cdn.myshop.com" }] }
+```
+* `next/image` resizes for the screen, serves modern formats, lazy-loads, and with `width`/`height` reserves the space so the page does not jump (CLS, Phase 3 Topic 11). Use `priority` on the top image (LCP). Always write `alt`.
+
+### 2. Common Mistakes
+| Mistake | Why it fails |
+|---|---|
+| Throwing an expected error (email taken) | The user gets an error screen, not a friendly form message |
+| Showing `error.message` in `error.tsx` | Can leak internal details |
+| `NEXT_PUBLIC_` on a secret | Every visitor can see it |
+| Committing `.env.local` | Secret becomes public |
+| `<img>` without `width`/`height` | Layout shift (CLS) and no optimization |
+| Missing `alt` | Hurts accessibility and SEO |
+| Remote image without `remotePatterns` | Next.js refuses to load it |
+| Blank page instead of `notFound()` | Google sees a normal page, not a 404 |
+
+### 3. Practice Checks (passed)
+* **V1:** (a) email already taken = return as state; (b) product not in DB = `notFound()`; (c) DB down = `error.tsx` (throw). All correct. No one-line reasons this time.
+* **V2** (`NEXT_PUBLIC_STRIPE_SECRET_KEY` and `<img>` without sizes):
+  * Env: correct. `NEXT_PUBLIC_` ships the key to the browser at build time so a hacker can read it; remove the prefix; do not push `.env.local`. **Add:** if that key was ever built or deployed, it is already exposed, so **rotate it** (revoke and create a new key). Renaming alone is not enough. The correct name is `STRIPE_SECRET_KEY`.
+  * Image: **partial.** He noticed the missing `width`/`height`, but the problem is not "moves with the screen". Without sizes the browser does not know the image size until it downloads, so the space is not reserved and the content below **jumps** when it loads (layout shift, CLS). A plain `<img>` also gets no resizing or lazy loading. **Fix:** use `next/image` with `width`/`height` (or `fill`) and `alt`.
+
+### 4. Optional / Later (not needed now)
+* `global-error.tsx`, `catchError` (Cache Components).
+* `await connection()` to read an env value at request time instead of build time.
+* Sitemap, `robots.txt`, `opengraph-image`, `next/font`, Next.js 16 image default changes (`minimumCacheTTL`, `qualities`, `localPatterns`).
+
+---
